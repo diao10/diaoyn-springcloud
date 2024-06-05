@@ -1,0 +1,31 @@
+server:
+  port: 8206
+spring:
+  profiles:
+    active: dev
+  application:
+    name: provider
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.253.123:8848
+        username: nacos
+        password: nacos
+      config:
+        server-addr: 192.168.253.123:8848
+        username: nacos
+        password: nacos
+        file-extension: yaml
+user:
+  username: admin
+  password: password
+
+
+
+
+

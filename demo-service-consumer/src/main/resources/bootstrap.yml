@@ -1,0 +1,11 @@
+server:
+  port: 8406
+spring:
+  profiles:
+    active: dev
+  application:
+    name: consumer
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher

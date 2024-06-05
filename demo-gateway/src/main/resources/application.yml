@@ -1,0 +1,31 @@
+server:
+  port: 8721
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: provider
+          uri: lb://provider
+          predicates:
+            - Path=/provider/**
+        - id: consumer
+          uri: lb://consumer
+          predicates:
+            - Path=/consumer/**
+
+
+  main:
+    web-application-type: reactive
+
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
+
