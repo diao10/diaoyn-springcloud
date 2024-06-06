@@ -29,8 +29,11 @@
         <lombok.version>1.18.24</lombok.version>
         <demo.version>0.0.1-SNAPSHOT</demo.version>
         <swagger.fox.version>3.0.0</swagger.fox.version>
+        <knife4j.version>3.0</knife4j.version>
         <validation.version>3.2.0</validation.version>
         <spring.cloud.version>3.1.3</spring.cloud.version>
+        <mysql.version>8.0.33</mysql.version>
+        <mybatis-plus.version>3.5.6</mybatis-plus.version>
 
     </properties>
 
@@ -64,6 +67,12 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-boot-starter</artifactId>
                 <version>${swagger.fox.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
             </dependency>
 
             <dependency>
@@ -106,6 +115,19 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <profiles>
@@ -170,6 +192,7 @@
                     <include>application-${env}.yml</include><!--这里使用占位符进行动态引用以确定具体的打包文件-->
                     <include>application.yml</include><!--主配置文件必须打包-->
                     <include>bootstrap.yml</include><!--主配置文件必须打包-->
+                    <include>banner.*</include>
                 </includes>
                 <filtering>true</filtering><!--开启过滤，在打包时application.yml中配置的@env@将被确定到底是什么变量-->
             </resource>

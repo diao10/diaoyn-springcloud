@@ -1,0 +1,15 @@
+server:
+  port: 8206
+spring:
+  profiles:
+    active: dev
+  application:
+    name: provider
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+
+
+

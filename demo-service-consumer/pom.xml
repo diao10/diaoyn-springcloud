@@ -86,7 +86,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.example.demoserviceconsumer.DemoServiceConsumerApplication</mainClass>
+                    <mainClass>com.example.consumer.DemoServiceConsumerApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>
