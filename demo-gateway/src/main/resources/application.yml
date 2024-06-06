@@ -21,7 +21,6 @@ spring:
           predicates:
             - Path=/consumer/**
 
-
   main:
     web-application-type: reactive
 
