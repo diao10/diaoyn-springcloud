@@ -1,10 +1,12 @@
 package com.example.gateway.config;
 
 import cn.hutool.core.date.StopWatch;
+import cn.hutool.core.util.StrUtil;
 import com.example.common.vo.ResponseVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -24,15 +26,16 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class AuthFilter implements GlobalFilter, Ordered {
 
+    @Value("${exclude.path}")
+    private String excludePath;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
-
-        if (request.getURI().getPath().contains("/demo")
-                || request.getURI().getPath().contains("/v2/api-docs")) {
+        if (StrUtil.containsAny(request.getURI().getPath(), StrUtil.splitToArray(excludePath, ","))) {
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                 stopWatch.stop();
                 if (stopWatch.getTotalTimeMillis() > 3000) {
