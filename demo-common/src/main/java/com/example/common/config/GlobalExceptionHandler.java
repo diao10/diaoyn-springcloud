@@ -37,8 +37,8 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseVO<Void> doHandleRuntimeException(RuntimeException e) {
+    @ExceptionHandler(Exception.class)
+    public ResponseVO<Void> doHandleRuntimeException(Exception e) {
         log.error(e.getMessage(), e);
         return ResponseVO.fail("系统错误");
     }

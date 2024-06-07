@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <property name="log.level" value="debug" />
+    <property name="log.maxHistory" value="30" />
+    <property name="log.filePath" value="/server/indicator/logs/" />
+<!--    <property name="log.pattern" value="%cn[%thread-%5p][%d{yyyy-MM-dd HH:mm:ss.S}]%m%n[%class:%L] \n"/>-->
+    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <property name="log.appName" value="error_corrector" />
+    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HH" />
+    <contextName>${log.appName}${bySecond}</contextName>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="rollingAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.filePath}${log.appName}.log</file>
+        <append>true</append>
+        <prudent>false</prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${log.filePath}${log.appName}.%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+
+        <!--<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>10MB</maxFileSize>
+        </triggeringPolicy>-->
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${log.pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>-->
+    </appender>
+
+<!--    <logger name="com.cbhb" level="${log.level}" additivity="true">-->
+<!--        <appender-ref ref="rollingAppender"/>-->
+<!--        <appender-ref ref="console"/>-->
+<!--    </logger>-->
+
+    <root level="${log.level}">
+        <appender-ref ref="console"/>
+        <appender-ref ref="rollingAppender"/>
+    </root>
+
+</configuration>
