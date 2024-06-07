@@ -69,6 +69,11 @@
             <version>2.3.32</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+        </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>

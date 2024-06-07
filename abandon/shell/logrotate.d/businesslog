@@ -1,0 +1,13 @@
+/home/srp/server/business/logs/stdout.log
+{
+su root srp
+daily
+copytruncate
+compress
+delaycompress
+rotate 10
+missingok
+notifempty
+dateext
+}
+
