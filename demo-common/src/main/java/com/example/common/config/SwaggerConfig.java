@@ -8,6 +8,7 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.spi.DocumentationType;
@@ -40,6 +41,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 .title("基于Swagger构建的Rest API文档")
                 .version("1.0")
+                .contact(new Contact("diaoyn", "", "minmin_741852@163.com"))
                 .build();
     }
 

@@ -5,7 +5,9 @@
 # 各个模块以微服务形式启动
 
 swagger2本地访问地址为
-http://localhost:8721/swagger-ui/index.html
+
+[//]: # (http://localhost:8721/swagger-ui/index.html)
+http://localhost:8721/doc.html
 /demo接口不会验证权限
 Authorization只校验了是否为空，填写任意值即可通过
 

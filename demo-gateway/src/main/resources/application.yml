@@ -27,7 +27,3 @@ spring:
 exclude:
   path: /v2/api-docs,/swagger**/**,/webjars/**,/v2/**,/swagger-ui.html,/doc.html,/error
 
-logging:
-  level:
-    org.springframework.cloud.gateway: debug
-

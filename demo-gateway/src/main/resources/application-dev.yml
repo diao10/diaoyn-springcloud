@@ -9,3 +9,7 @@ spring:
 springfox:
   documentation:
     enabled: false
+
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
