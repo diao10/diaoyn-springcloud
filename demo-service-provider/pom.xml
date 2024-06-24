@@ -3,7 +3,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>demo-service-provider</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>demo-service-provider</name>
     <description>demo-service-provider</description>
 
@@ -22,7 +21,7 @@
 
         <dependency>
             <groupId>com.example</groupId>
-            <artifactId>demo-common</artifactId>
+            <artifactId>demo-service-plugin</artifactId>
         </dependency>
 
         <dependency>
@@ -33,12 +32,6 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
