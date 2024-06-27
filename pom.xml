@@ -19,7 +19,6 @@
         <module>demo-service-provider</module>
         <module>demo-service-consumer</module>
         <module>demo-service-plugin</module>
-        <module>demo-service-plugin-api</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

@@ -1,20 +1,35 @@
 package com.example.gateway;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.env.Environment;
 
 /**
  * @author diaoyn
  */
+
 @SpringBootApplication
 @EnableDiscoveryClient
 @ComponentScan(basePackages = {"com.example.gateway", "com.example.common"})
+@Slf4j
 public class DemoGatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoGatewayApplication.class, args);
+        SpringApplication springApplication = new SpringApplication(DemoGatewayApplication.class);
+
+        ConfigurableApplicationContext configurableApplicationContext = springApplication.run(args);
+        Environment env = configurableApplicationContext.getEnvironment();
+        log.info("                        ----------------------------------------------------------\n" +
+                        "                        Application is running! Access URLs:\n" +
+                        "                        Local:    http://localhost:{}\n" +
+                        "                        Doc:      http://localhost:{}/doc.html\n" +
+                        "                        ----------------------------------------------------------",
+                env.getProperty("server.port"),
+                env.getProperty("server.port"));
     }
 
 }
