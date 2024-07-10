@@ -1,6 +1,7 @@
 package com.example.provider.aspect;
 
 import cn.hutool.core.date.StopWatch;
+import cn.hutool.core.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -31,6 +32,9 @@ public class LogAspect {
         stopWatch.stop();
         if (stopWatch.getTotalTimeMillis() > 3000) {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            if (ObjectUtil.isNull(attributes)) {
+                return result;
+            }
             proceedingJoinPoint.getArgs();
             log.info("响应时间超过3秒的请求打印日志-------------------------------------------------------------------");
             log.info("Request IP: {}, URI: {}, cost: {} ms, params: {}, result: {}"

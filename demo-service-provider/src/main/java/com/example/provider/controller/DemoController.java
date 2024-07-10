@@ -3,6 +3,7 @@ package com.example.provider.controller;
 import com.example.common.vo.DemoRepVO;
 import com.example.common.vo.DemoVO;
 import com.example.common.vo.ResponseVO;
+import com.example.provider.aspect.AutoLog;
 import com.example.provider.service.DemoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +29,7 @@ public class DemoController {
 
     @ApiOperation("测试用户")
     @PostMapping("/demo")
+    @AutoLog(value = "/demo", name = "测试用户")
     public ResponseVO<DemoRepVO> demo(@RequestBody @Validated DemoVO vo) {
         return demoService.demo(vo);
     }

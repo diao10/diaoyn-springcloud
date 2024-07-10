@@ -1,5 +1,6 @@
-package com.example.common.config;
+package com.example.common.handle;
 
+import com.example.common.config.BizException;
 import com.example.common.vo.ResponseVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yaml.snakeyaml.constructor.DuplicateKeyException;
 
 import java.util.List;
 
@@ -34,6 +36,22 @@ public class GlobalExceptionHandler {
         BindingResult result = exception.getBindingResult();
         List<FieldError> fieldErrors = result.getFieldErrors();
         return ResponseVO.fail(fieldErrors.get(0).getDefaultMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(DuplicateKeyException.class)
+    public ResponseVO<?> handleDuplicateKeyException(DuplicateKeyException e) {
+        log.error(e.getMessage(), e);
+        return ResponseVO.fail("数据库中已存在该记录");
+    }
+
+    /**
+     * BizException
+     */
+    @ExceptionHandler(BizException.class)
+    public ResponseVO<?> handleBizTipException(BizException e) {
+        log.error(e.getMessage());
+        return ResponseVO.fail(e.getMessage());
     }
 
     @ResponseBody
