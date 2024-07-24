@@ -65,6 +65,13 @@
             <artifactId>poi-ooxml</artifactId>
         </dependency>
 
+        <!--<scope>test</scope>不会传递-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>
