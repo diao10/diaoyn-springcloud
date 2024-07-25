@@ -30,7 +30,8 @@ public interface SqlMapper extends BaseMapper<Void> {
             "       ifnull(T2.COLUMN_DEFAULT, '') 默认值,\n" +
             "       ifnull(T2.COLUMN_COMMENT, '') 字段备注\n" +
             "FROM INFORMATION_SCHEMA.COLUMNS T2\n" +
-            "WHERE T2.TABLE_SCHEMA = #{table_schema} and T2.TABLE_NAME  = #{table_name}")
+            "WHERE T2.TABLE_SCHEMA = #{table_schema} and T2.TABLE_NAME  = #{table_name}\n" +
+            "order by T2.ORDINAL_POSITION ")
     List<LinkedHashMap<String, Object>> selectColumnMaps(@Param("table_schema") String tableSchema,@Param("table_name") String tableName);
 
 }
