@@ -19,6 +19,7 @@
         <module>demo-service-provider</module>
         <module>demo-service-consumer</module>
         <module>demo-service-plugin</module>
+
     </modules>
     <properties>
         <java.version>1.8</java.version>
@@ -161,7 +162,6 @@
         </profile>
     </profiles>
 
-
     <build>
         <!--去除版本号-->
         <finalName>${project.artifactId}</finalName>
@@ -177,14 +177,17 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>repackage</id>
+                        <phase>compile</phase>
                         <goals>
-                            <goal>repackage</goal>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
