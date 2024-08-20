@@ -14,8 +14,6 @@ import java.io.RandomAccessFile;
 import java.util.Arrays;
 
 /**
- * rar解压
- *
  * @author diaoyn
  * @ClassName RarUtil
  * @Date 2024/8/20 16:02
@@ -97,7 +95,8 @@ public class RarUtil {
      * @return File
      */
     public static File unRar(String rarDir, String passWord) {
-        return unRar(rarDir, new File(rarDir).getParent(), passWord);
+        return unRar(rarDir, new File(rarDir).getAbsolutePath().substring(0,
+                new File(rarDir).getAbsolutePath().lastIndexOf(".")), passWord);
     }
 
     /**
@@ -105,7 +104,7 @@ public class RarUtil {
      * @return File
      */
     public static File unRar(String rarDir) {
-        return unRar(rarDir, new File(rarDir).getParent(), null);
+        return unRar(rarDir, null);
     }
 
 
@@ -175,5 +174,10 @@ public class RarUtil {
                 }
             }
         }
+    }
+
+
+    public static void main(String[] args) {
+        RarUtil.unRar("C:\\Users\\EDY\\Desktop\\测试04.rar");
     }
 }
