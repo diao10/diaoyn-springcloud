@@ -36,7 +36,7 @@
         <mysql.version>8.0.33</mysql.version>
         <mybatis-plus.version>3.5.6</mybatis-plus.version>
         <poi-ooxml.version>5.2.5</poi-ooxml.version>
-
+        <sevenzipjbinding.version>16.02-2.01</sevenzipjbinding.version>
     </properties>
 
     <dependencyManagement>
@@ -135,7 +135,17 @@
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi-ooxml.version}</version>
             </dependency>
-
+            <!--rar-->
+            <dependency>
+                <groupId>net.sf.sevenzipjbinding</groupId>
+                <artifactId>sevenzipjbinding</artifactId>
+                <version>${sevenzipjbinding.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.sevenzipjbinding</groupId>
+                <artifactId>sevenzipjbinding-all-platforms</artifactId>
+                <version>${sevenzipjbinding.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <profiles>
