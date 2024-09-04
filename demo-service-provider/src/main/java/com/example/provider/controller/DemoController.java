@@ -8,12 +8,11 @@ import com.example.provider.service.DemoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author diaoyn
@@ -44,5 +43,19 @@ public class DemoController {
             throw new RuntimeException(e);
         }
         return demoService.demo(vo);
+    }
+
+    @ApiOperation("连续获取服务器时间")
+    @GetMapping("/getTime")
+    public SseEmitter getTime(String clientId) {
+        SseEmitter emitter = demoService.getConn(clientId);
+        CompletableFuture.runAsync(() -> {
+            try {
+                demoService.send(clientId);
+            } catch (Exception e) {
+                throw new RuntimeException("推送数据异常");
+            }
+        });
+        return emitter;
     }
 }
