@@ -1,0 +1,31 @@
+server:
+  port: 8212
+spring:
+  profiles:
+    active: dev
+  application:
+    name: provider
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  thymeleaf:
+    cache: true
+    enable: true
+    suffix: .html
+    prefix: classpath:/templates/
+    encoding: UTF-8
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    jmx:
+      exposure:
+        include: '*'
+    web:
+      exposure:
+        include: '*'
+    health:
+      show-details: always
