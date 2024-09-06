@@ -26,12 +26,12 @@ import java.util.stream.Collectors;
 public class ConvertUtil {
 
     //大写加下划线
-    private static String reg = "^[A-Z_]+$";
+    private static final String reg = "^[A-Z_]+$";
 
-    private static String num[] = {"零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"};
-    private static String unit[] = {"十", "百", "千", "万", "十", "百", "千", "亿", "十", "百", "千"};
+    private static final String[] num = {"零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"};
+    private static final String[] unit = {"十", "百", "千", "万", "十", "百", "千", "亿", "十", "百", "千"};
 
-    private static List<String> REMOVE_SURPLUS_LIST = new ArrayList<String>() {{
+    private static final List<String> REMOVE_SURPLUS_LIST = new ArrayList<String>() {{
         add("主键ID");
         add("企业ID");
         add("数据原始主键");

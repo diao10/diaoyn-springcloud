@@ -8,6 +8,11 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/demo?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    username: root
+    password: root
 
 management:
   server:
@@ -19,5 +24,7 @@ management:
     web:
       exposure:
         include: '*'
-    health:
-      show-details: always
+
+beetl:
+  templatesPath:
+    templates: classpath:/templates/

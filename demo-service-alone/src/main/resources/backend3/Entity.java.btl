@@ -18,11 +18,11 @@ import java.util.Date;
 public class ${className} {
 
     <% for(var i = 0; i < configList.~size; i++) { %>
-    /** ${configList[i].fieldRemark} */
+    /** ${configList[i].fieldComment} */
     <% if(configList[i].needTableId) { %>
     @TableId
     <% } else { %><% } %>
-    @Schema(description = "${configList[i].fieldRemark}")
+    @Schema(description = "${configList[i].fieldComment}")
     <% if(configList[i].needAutoInsert) { %>
     @TableField(fill = FieldFill.INSERT)
     <% } else { %><% } %>
