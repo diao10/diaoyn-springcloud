@@ -18,7 +18,7 @@ import lombok.Getter;
  * ${functionName}枚举
  *
  * @author ${authorName}
- * @date ${createTime}
+ * @Date ${createTime}
  **/
 @Getter
 public enum ${className}Enum {

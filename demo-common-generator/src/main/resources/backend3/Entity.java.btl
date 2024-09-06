@@ -10,7 +10,7 @@ import java.util.Date;
  * ${className}实体
  *
  * @author ${authorName}
- * @date ${createTime}
+ * @Date ${createTime}
  **/
 @Data
 @TableName("${tableName}")

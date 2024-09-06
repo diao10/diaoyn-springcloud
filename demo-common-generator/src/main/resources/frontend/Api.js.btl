@@ -6,7 +6,7 @@ const request = (url, ...arg) => baseRequest(`/${moduleName}/${busName}/` + url,
  * ${functionName}Api接口管理器
  *
  * @author ${authorName}
- * @date ${createTime}
+ * @Date ${createTime}
  **/
 export default {
 	// 获取${functionName}分页

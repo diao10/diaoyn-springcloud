@@ -19,7 +19,7 @@ import ${packageName}.entity.${className};
  * ${functionName}Mapper接口
  *
  * @author ${authorName}
- * @date ${createTime}
+ * @Date ${createTime}
  **/
 public interface ${className}Mapper extends BaseMapper<${className}> {
 }

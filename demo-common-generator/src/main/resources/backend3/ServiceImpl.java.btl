@@ -38,7 +38,7 @@ import java.util.List;
  * ${functionName}Service接口实现类
  *
  * @author ${authorName}
- * @date ${createTime}
+ * @Date ${createTime}
  **/
 @Service
 public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${className}> implements ${className}Service {

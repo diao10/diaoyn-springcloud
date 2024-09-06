@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotBlank;
  * ${functionName}Id参数
  *
  * @author ${authorName}
- * @date ${createTime}
+ * @Date ${createTime}
  **/
 @Getter
 @Setter

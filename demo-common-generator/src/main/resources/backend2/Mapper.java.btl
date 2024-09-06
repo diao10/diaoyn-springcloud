@@ -7,7 +7,7 @@ import ${packageName}.entity.${className};
  * ${tableComment}(${className})Mapper接口
  *
  * @author ${authorName}
- * @date ${createTime}
+ * @Date ${createTime}
  **/
 public interface ${className}Mapper extends BaseMapper<${className}> {
 }

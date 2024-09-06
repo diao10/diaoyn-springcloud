@@ -27,7 +27,7 @@ import java.util.List;
  * ${functionName}控制器
  *
  * @author ${authorName}
- * @date ${createTime}
+ * @Date ${createTime}
  */
 @Tag(name = "${functionName}控制器")
 @RestController
@@ -41,7 +41,7 @@ public class ${className}Controller {
      * 获取${functionName}分页
      *
      * @author ${authorName}
-     * @date ${createTime}
+     * @Date ${createTime}
      */
     @Operation(summary = "获取${functionName}分页")
     @SaCheckPermission("/${moduleName}/${busName}/page")
@@ -54,7 +54,7 @@ public class ${className}Controller {
      * 添加${functionName}
      *
      * @author ${authorName}
-     * @date ${createTime}
+     * @Date ${createTime}
      */
     @Operation(summary = "添加${functionName}")
     @CommonLog("添加${functionName}")
@@ -69,7 +69,7 @@ public class ${className}Controller {
      * 编辑${functionName}
      *
      * @author ${authorName}
-     * @date ${createTime}
+     * @Date ${createTime}
      */
     @Operation(summary = "编辑${functionName}")
     @CommonLog("编辑${functionName}")
@@ -84,7 +84,7 @@ public class ${className}Controller {
      * 删除${functionName}
      *
      * @author ${authorName}
-     * @date ${createTime}
+     * @Date ${createTime}
      */
     @Operation(summary = "删除${functionName}")
     @CommonLog("删除${functionName}")
@@ -100,7 +100,7 @@ public class ${className}Controller {
      * 获取${functionName}详情
      *
      * @author ${authorName}
-     * @date ${createTime}
+     * @Date ${createTime}
      */
     @Operation(summary = "获取${functionName}详情")
     @SaCheckPermission("/${moduleName}/${busName}/detail")
