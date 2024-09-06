@@ -2,7 +2,7 @@ package com.common.generator.querys;
 
 
 /**
- * https://github.com/baomidou/generator/pull/83
+ * <a href="https://github.com/baomidou/generator/pull/83">...</a>
  *
  * @author lix
  */

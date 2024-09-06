@@ -27,7 +27,7 @@ public class MySqlQuery extends AbstractDbQuery {
         StrBuilder builder = new StrBuilder();
         builder.append("show table status WHERE ").append(tableName()).append(" in (");
         for (String tableName : tableNames) {
-            builder.append("`" + tableName + "`");
+            builder.append("`").append(tableName).append("`");
             builder.append(",");
         }
         builder.delTo(1);

@@ -1,6 +1,5 @@
 package com.common.generator.dto;
 
-import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

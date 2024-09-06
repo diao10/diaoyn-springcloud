@@ -24,7 +24,3 @@ management:
     web:
       exposure:
         include: '*'
-
-beetl:
-  templatesPath:
-    templates: classpath:/templates/

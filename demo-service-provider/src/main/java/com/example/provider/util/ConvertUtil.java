@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 /**
  * @author diaoyn
  * @version 1.0
- * @package com.cbhb.business.util
  * @date 2021/8/16 15:56
  */
 public class ConvertUtil {
@@ -62,15 +61,16 @@ public class ConvertUtil {
     /**
      * 代码项添加代码名称
      *
-     * @param list
-     * @param map
-     * @param flag
-     * @param columns
-     * @param <K>
-     * @param <V>
-     * @return
+     * @param list    list
+     * @param map     map
+     * @param flag    flag
+     * @param columns columns
+     * @param <K>     <K>
+     * @param <V>     <V>
+     * @return List<Map < String, Object>>
      */
-    public static <K, V> List<Map<String, Object>> convertColumn(List<Map<String, Object>> list, Map<K, V> map, Boolean flag, String... columns) {
+    public static <K, V> List<Map<String, Object>> convertColumn(List<Map<String, Object>> list, Map<K, V> map,
+                                                                 Boolean flag, String... columns) {
 
         list.stream().filter(m -> {
             convertColumn(m, map, flag, columns);
@@ -82,14 +82,14 @@ public class ConvertUtil {
     /**
      * 代码项添加代码名称
      *
-     * @param t
-     * @param map
-     * @param flag
-     * @param columns
-     * @param <T>
-     * @param <K>
-     * @param <V>
-     * @return
+     * @param t       t
+     * @param map     map
+     * @param flag    flag
+     * @param columns columns
+     * @param <T>     <T>
+     * @param <K>     <K>
+     * @param <V>     <V>
+     * @return Map<String, Object>
      */
     public static <T, K, V> Map<String, Object> convertColumn(T t, Map<K, V> map, Boolean flag, String... columns) {
         return convertColumn(object2Map(t), map, flag, columns);
@@ -98,15 +98,16 @@ public class ConvertUtil {
     /**
      * 代码项添加代码名称
      *
-     * @param m
-     * @param map
-     * @param flag
-     * @param columns
-     * @param <K>
-     * @param <V>
-     * @return
+     * @param m       m
+     * @param map     map
+     * @param flag    flag
+     * @param columns columns
+     * @param <K>     <K>
+     * @param <V>     <V>
+     * @return Map<String, Object>
      */
-    public static <K, V> Map<String, Object> convertColumn(Map<String, Object> m, Map<K, V> map, Boolean flag, String... columns) {
+    public static <K, V> Map<String, Object> convertColumn(Map<String, Object> m, Map<K, V> map, Boolean flag,
+                                                           String... columns) {
         String name = "";
         for (String column : columns) {
             if (Pattern.matches(reg, column)) {
@@ -138,13 +139,13 @@ public class ConvertUtil {
     /**
      * 代码项添加代码名称
      *
-     * @param list
-     * @param map
-     * @param columns
-     * @param <T>
-     * @param <K>
-     * @param <V>
-     * @return
+     * @param list    list
+     * @param map     map
+     * @param columns columns
+     * @param <T>     <T>
+     * @param <K>     <K>
+     * @param <V>     <V>
+     * @return List<Map < String, Object>>
      */
     public static <T, K, V> List<Map<String, Object>> convertColumn(List<T> list, Map<K, V> map, String...
             columns) {
@@ -158,15 +159,15 @@ public class ConvertUtil {
     /**
      * 代码项添加代码名称
      *
-     * @param e
-     * @param map
-     * @param columns
-     * @param <E>
-     * @param <T>
-     * @param <F>
-     * @param <K>
-     * @param <V>
-     * @return
+     * @param e       e
+     * @param map     map
+     * @param columns columns
+     * @param <E>     <E>
+     * @param <T>     <T>
+     * @param <F>     <F>
+     * @param <K>     <K>
+     * @param <V>     <V>
+     * @return <E extends IPage<T>
      */
     public static <E extends IPage<T>, T, F extends IPage<Map<String, Object>>, K, V> F
     convertColumn(E e, Map<K, V> map, String... columns) {
@@ -185,10 +186,10 @@ public class ConvertUtil {
     /**
      * page实体专map
      *
-     * @param e
-     * @param <E>
-     * @param <T>
-     * @return
+     * @param e   e
+     * @param <E> <E>
+     * @param <T> <T>
+     * @return <E extends IPage<T>, T>
      */
     public static <E extends IPage<T>, T> Page<Map<String, Object>> convertPageResult(E e) {
         if (e == null) {
@@ -217,9 +218,9 @@ public class ConvertUtil {
     /**
      * 对象转map
      *
-     * @param t
-     * @param <T>
-     * @return
+     * @param t   t
+     * @param <T> <T>
+     * @return <T>
      */
     public static <T> Map<String, Object> object2Map(T t) {
         Map<String, Object> map = new HashMap<>();
@@ -250,9 +251,9 @@ public class ConvertUtil {
     /**
      * 对象组转map组
      *
-     * @param tList
-     * @param <T>
-     * @return
+     * @param tList tList
+     * @param <T>   <T>
+     * @return <T>
      */
     public static <T> List<Map<String, Object>> objectList2MapList(List<T> tList) {
         List<Map<String, Object>> list = new ArrayList<>();
@@ -268,9 +269,9 @@ public class ConvertUtil {
     /**
      * 内容标红
      *
-     * @param str
-     * @param key
-     * @return
+     * @param str str
+     * @param key key
+     * @return String
      */
     public static String remarkRed(String str, String key) {
         if (StrUtil.isEmpty(str) || StrUtil.isEmpty(key)) {
@@ -283,9 +284,9 @@ public class ConvertUtil {
     /**
      * 内容标红
      *
-     * @param str
-     * @param list
-     * @return
+     * @param str  str
+     * @param list list
+     * @return String
      */
     public static String remarkRed(String str, List<String> list) {
         if (StrUtil.isEmpty(str) || list == null || list.isEmpty()) {
@@ -297,9 +298,9 @@ public class ConvertUtil {
     /**
      * 内容标红
      *
-     * @param str
-     * @param set
-     * @return
+     * @param str str
+     * @param set set
+     * @return String
      */
     public static String remarkRed(String str, Set<String> set) {
         if (StrUtil.isEmpty(str) || set == null || set.isEmpty()) {
@@ -314,8 +315,8 @@ public class ConvertUtil {
     /**
      * 数字转汉字
      *
-     * @param str
-     * @return
+     * @param str str
+     * @return String
      */
     public static String int2chineseNum(String str) {
         if (StrUtil.isEmpty(str)) {
@@ -357,8 +358,8 @@ public class ConvertUtil {
     /**
      * 数字转中文排名
      *
-     * @param arg
-     * @return
+     * @param arg arg
+     * @return <T>
      */
     public static <T> List<T> int2chineseRank(List<T> list, String arg) {
         list.forEach(o -> {
@@ -380,9 +381,9 @@ public class ConvertUtil {
     /**
      * 金额加逗号和单位
      *
-     * @param str
-     * @param unit
-     * @return
+     * @param str  str
+     * @param unit unit
+     * @return String
      */
 
     public static String num2Comma(String str, String unit) {
@@ -404,9 +405,9 @@ public class ConvertUtil {
     /**
      * 数字转百分比
      *
-     * @param num
-     * @param point
-     * @return
+     * @param num   num
+     * @param point point
+     * @return String
      */
     public static String decimal2Percent(BigDecimal num, Integer point) {
         if (num == null) {
@@ -423,9 +424,9 @@ public class ConvertUtil {
     /**
      * 数字转百分比
      *
-     * @param numStr
-     * @param point
-     * @return
+     * @param numStr numStr
+     * @param point  point
+     * @return String
      */
     public static String decimal2Percent(String numStr, Integer point) {
         if (StrUtil.isEmpty(numStr)) {
@@ -445,10 +446,10 @@ public class ConvertUtil {
     /**
      * 转化为tag
      *
-     * @param isEmphasis
-     * @param resPerNum
-     * @param volNum
-     * @return
+     * @param isEmphasis isEmphasis
+     * @param resPerNum  resPerNum
+     * @param volNum     volNum
+     * @return List<Map < String, Object>>
      */
     public static List<Map<String, Object>> column2Tags(Integer isEmphasis, Long resPerNum, Long volNum) {
         List<Map<String, Object>> list = new ArrayList<>();
@@ -477,8 +478,8 @@ public class ConvertUtil {
     /**
      * 去除详情里多余的字段
      *
-     * @param details
-     * @return
+     * @param details details
+     * @return String
      */
     public static String removeSurplus(String details) {
         if (StrUtil.isEmpty(details)) {
@@ -506,10 +507,10 @@ public class ConvertUtil {
     /**
      * 递归tree
      *
-     * @param list
-     * @param param
-     * @param parentParam
-     * @return
+     * @param list        list
+     * @param param       param
+     * @param parentParam parentParam
+     * @return JSONArray
      */
     public static JSONArray findChildren(List<Map<String, Object>> list, String param, String parentParam) {
         JSONArray array = new JSONArray();
@@ -532,13 +533,14 @@ public class ConvertUtil {
     /**
      * 递归tree
      *
-     * @param list
-     * @param param
-     * @param parentParam
-     * @param code
-     * @return
+     * @param list        list
+     * @param param       param
+     * @param parentParam parentParam
+     * @param code        code
+     * @return JSONArray
      */
-    public static JSONArray findChildren(List<Map<String, Object>> list, String param, String parentParam, Object code) {
+    public static JSONArray findChildren(List<Map<String, Object>> list, String param, String parentParam,
+                                         Object code) {
         JSONArray array = new JSONArray();
         if (ObjectUtil.isEmpty(code)) {
             return null;
