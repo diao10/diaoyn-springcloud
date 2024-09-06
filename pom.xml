@@ -15,6 +15,7 @@
     </parent>
     <modules>
         <module>demo-common</module>
+        <module>demo-common-generator</module>
         <module>demo-gateway</module>
         <module>demo-service-provider</module>
         <module>demo-service-consumer</module>

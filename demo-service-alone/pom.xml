@@ -39,11 +39,6 @@
         <!--            <artifactId>spring-boot-starter-security</artifactId>-->
         <!--        </dependency>-->
         <dependency>
-            <groupId>com.ibeetl</groupId>
-            <artifactId>beetl</artifactId>
-            <version>3.16.2.RELEASE</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
