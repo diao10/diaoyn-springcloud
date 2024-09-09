@@ -39,6 +39,9 @@ public class ${className} {
     <% } else if(springdoc) { %>
     @Schema(value = "${configList[i].fieldComment}"<% if(configList[i].isLogicDelete) { %>, hidden = true<% } %>)
     <% } %>
+    <% if (configList[i].fieldJavaType == 'Date') { %>
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    <% } %>
     private ${configList[i].fieldJavaType} ${configList[i].fieldNameCamelCase};
 
     <% } %>
