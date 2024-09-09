@@ -4,11 +4,11 @@
     var row = 0;
     %>
     <% for(var i = 0; i < configList.~size; i++) { %>
-        <% if(!configList[i].needTableId && configList[i].needPage) { searchCount ++; }%>
+        <% if(!configList[i].isKeyId && configList[i].needPage) { searchCount ++; }%>
     <% } %>
     <% if (searchCount > 0) { %>
     <% for(var i = 0; i < configList.~size; i++) { %>
-    <% if(!configList[i].needTableId && configList[i].needPage) { row ++; %>
+    <% if(!configList[i].isKeyId && configList[i].needPage) { row ++; %>
     <% if(row <= 1) { %>
     <snowy-search placeholder="请输入${configList[i].fieldRemark}" v-model="searchFormState.${configList[i].fieldNameCamelCase}" @confirm="loadData(true)" @clear="loadData(true)" :enableSenior="true" @seniorSearch="$refs.searchRef.open()"></snowy-search>
     <% } %>
@@ -19,7 +19,7 @@
     <view class="${busName}-list">
         <view class="item" v-for="(item, index) in ${classNameFirstLower}Data" :key="index" :index="index" @tap="moreTapItem(item, index)">
             <% for(var i = 0; i < configList.~size; i++) { %>
-            <% if(!configList[i].needTableId && configList[i].whetherTable && configList[i].fieldNameCamelCase != 'tenantId') { %>
+            <% if(!configList[i].isKeyId && configList[i].whetherTable && configList[i].fieldNameCamelCase != 'tenantId') { %>
             <uv-row customStyle="margin-bottom: 15rpx">
                 <uv-col :span="1">
                     <uv-icon size="18" name="tags-fill" color="#5677fc"></uv-icon>
@@ -52,7 +52,7 @@
     const searchFormState = reactive({
         <% if (searchCount > 0) { %>
         <% for(var i = 0; i < configList.~size; i++) { %>
-        <% if(!configList[i].needTableId && configList[i].needPage) { %>
+        <% if(!configList[i].isKeyId && configList[i].needPage) { %>
         ${configList[i].fieldNameCamelCase}: '',
         <% } %>
         <% } %>

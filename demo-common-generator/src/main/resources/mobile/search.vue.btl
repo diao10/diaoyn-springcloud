@@ -4,7 +4,7 @@
     var row = 0;
     %>
     <% for(var i = 0; i < configList.~size; i++) { %>
-       <% if(!configList[i].needTableId && configList[i].needPage) { searchCount ++; }%>
+       <% if(!configList[i].isKeyId && configList[i].needPage) { searchCount ++; }%>
     <% } %>
     <uv-popup ref="popRef" mode="bottom" bg-color="null" z-index="99">
         <view class="container">
@@ -14,7 +14,7 @@
             <% if (searchCount > 0) { %>
             <uv-form ref="formRef" :model="searchFormState" label-position="top" labelWidth="auto" :labelStyle="{marginBottom: '25rpx', fontSize: '27rpx', color: '#606266'}">
                 <% for(var i = 0; i < configList.~size; i++) { %>
-                <% if(!configList[i].needTableId && configList[i].needPage) { %>
+                <% if(!configList[i].isKeyId && configList[i].needPage) { %>
                 <% if(configList[i].effectType == 'input' || configList[i].effectType == 'textarea') { %>
                 <uv-form-item label="${configList[i].fieldRemark}" prop="${configList[i].fieldNameCamelCase}">
                     <uv-input v-model="searchFormState.${configList[i].fieldNameCamelCase}" placeholder="请输入${configList[i].fieldRemark}"></uv-input>
@@ -54,7 +54,7 @@
     })
     <% if (searchCount > 0) { %>
     <% for(var i = 0; i < configList.~size; i++) { %>
-    <% if(!configList[i].needTableId && configList[i].needPage) { %>
+    <% if(!configList[i].isKeyId && configList[i].needPage) { %>
     <% if (configList[i].effectType == 'select' || configList[i].effectType == 'radio' || configList[i].effectType == 'checkbox') { %>
     const ${configList[i].fieldNameCamelCase}Options = uni.$snowy.tool.dictList('${configList[i].dictTypeCode}')
     <% } %>
@@ -68,7 +68,7 @@
     const reset = () =>{
         // 重置数据
         <% for(var i = 0; i < configList.~size; i++) { %>
-        <% if(!configList[i].needTableId && configList[i].needPage) { %>
+        <% if(!configList[i].isKeyId && configList[i].needPage) { %>
         props.searchFormState.${configList[i].fieldNameCamelCase} = ''
         <% } %>
         <% } %>

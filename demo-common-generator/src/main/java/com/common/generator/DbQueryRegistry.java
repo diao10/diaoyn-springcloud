@@ -2,10 +2,13 @@ package com.common.generator;
 
 import com.common.generator.enums.DbType;
 import com.common.generator.querys.*;
+
 import java.util.EnumMap;
 import java.util.Map;
 
 /**
+ * 数据库构造器
+ *
  * @author diaoyn
  * @ClassName DbQueryRegistry
  * @Date 2024/9/6 10:31

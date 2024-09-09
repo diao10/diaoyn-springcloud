@@ -2,7 +2,7 @@
     <view class="container snowy-shadow">
         <uv-form ref="formRef" :model="formData" :rules="rules" label-position="top" labelWidth="auto" :labelStyle="{marginBottom: '25rpx', fontSize: '27rpx', color: '#606266'}">
             <% for(var i = 0; i < configList.~size; i++) { %>
-            <% if(!configList[i].needTableId && configList[i].whetherAddUpdate && configList[i].fieldNameCamelCase != 'tenantId') { %>
+            <% if(!configList[i].isKeyId && configList[i].whetherAddUpdate && configList[i].fieldNameCamelCase != 'tenantId') { %>
             <% if(configList[i].effectType == 'input') { %>
             <uv-form-item label="${configList[i].fieldRemark}" prop="${configList[i].fieldNameCamelCase}" :required="${configList[i].required}">
             	<uv-input v-model="formData.${configList[i].fieldNameCamelCase}" placeholder="请输入${configList[i].fieldRemark}"></uv-input>
@@ -57,7 +57,7 @@
     const formRef = ref()
     const formData = ref({
         <% for(var i = 0; i < configList.~size; i++) { %>
-        <% if(!configList[i].needTableId && configList[i].whetherAddUpdate && configList[i].fieldNameCamelCase != 'tenantId') { %>
+        <% if(!configList[i].isKeyId && configList[i].whetherAddUpdate && configList[i].fieldNameCamelCase != 'tenantId') { %>
         ${configList[i].fieldNameCamelCase}: '',
         <% } %>
         <% } %>
@@ -66,7 +66,7 @@
     // 去pages/biz/user/form.vue中寻找示例
     const rules = reactive({
         <% for(var i = 0; i < configList.~size; i++) { %>
-        <% if(!configList[i].needTableId && configList[i].whetherAddUpdate && configList[i].fieldNameCamelCase != 'tenantId' && configList[i].required) { %>
+        <% if(!configList[i].isKeyId && configList[i].whetherAddUpdate && configList[i].fieldNameCamelCase != 'tenantId' && configList[i].required) { %>
         ${configList[i].fieldNameCamelCase}: [{
             type: 'string',
             required: true,
@@ -77,7 +77,7 @@
         <% } %>
     })
     <% for(var i = 0; i < configList.~size; i++) { %>
-    <% if(!configList[i].needTableId) { %>
+    <% if(!configList[i].isKeyId) { %>
     <% if(configList[i].effectType == 'select' || configList[i].effectType == 'radio' || configList[i].effectType == 'checkbox') { %>
     const ${configList[i].fieldNameCamelCase}Options = ref([])
     <% } %>
@@ -85,7 +85,7 @@
     <% } %>
     onLoad((option) => {
         <% for(var i = 0; i < configList.~size; i++) { %>
-        <% if(!configList[i].needTableId) { %>
+        <% if(!configList[i].isKeyId) { %>
         <% if(configList[i].effectType == 'select' || configList[i].effectType == 'radio' || configList[i].effectType == 'checkbox') { %>
         ${configList[i].fieldNameCamelCase}Options.value = uni.$snowy.tool.dictList('${configList[i].dictTypeCode}')
         <% } %>

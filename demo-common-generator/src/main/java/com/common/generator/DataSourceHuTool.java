@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * 用huTool的连接数据库工具连接数据库
+ *
  * @author diaoyn
  * @ClassName DataSourceHuTool
  * @Date 2024/9/6 10:40
@@ -23,6 +25,13 @@ public class DataSourceHuTool {
 
     private static Db db;
 
+    /**
+     * 根据url获取数据库连接
+     *
+     * @param url      数据库连接url
+     * @param user     数据库用户名
+     * @param password 数据库密码
+     */
     public static void getBb(String url, String user, String password) {
         try {
             if (db == null) {
@@ -35,6 +44,15 @@ public class DataSourceHuTool {
     }
 
 
+    /**
+     * 查看数据库表
+     *
+     * @param url        数据库连接url
+     * @param user       数据库用户名
+     * @param password   数据库密码
+     * @param tableNames 表名
+     * @return List<TableDto>
+     */
     public static List<TableDto> getTable(String url, String user, String password, String... tableNames) {
         try {
             getBb(url, user, password);
@@ -46,6 +64,7 @@ public class DataSourceHuTool {
                 TableDto dto = TableDto.builder()
                         .tableName(entity.getStr(query.tableName()))
                         .tableComment(entity.getStr(query.tableComment()))
+                        .tableNameCamelCase(StrUtil.toCamelCase(entity.getStr(query.tableName())))
                         .tableNameCamelCaseFirstUpper(StrUtil.upperFirst(StrUtil.toCamelCase(entity.getStr(query.tableName()))))
                         .build();
                 resultList.add(dto);
@@ -57,17 +76,28 @@ public class DataSourceHuTool {
     }
 
 
+    /**
+     * 根据表名获取字段信息
+     *
+     * @param url       数据库连接url
+     * @param user      数据库用户名
+     * @param password  数据库密码
+     * @param tableName 表名
+     * @return
+     */
     public static List<FieldDto> getField(String url, String user, String password, String tableName) {
         try {
             getBb(url, user, password);
             GlobalDbConfig.setCaseInsensitive(true);
             IDbQuery query = getDbQuery(url);
-            List<Entity> queryList = db.query(query.tableFieldsSql(null, tableName));
+            ITypeConvert convert = getConvert(url);
+            List<Entity> fieldList = db.query(query.tableFieldsSql(null, tableName));
             List<FieldDto> resultList = new ArrayList<>();
-            for (Entity entity : queryList) {
+            for (Entity entity : fieldList) {
                 FieldDto dto = FieldDto.builder()
                         .fieldName(entity.getStr(query.fieldName()))
                         .fieldType(entity.getStr(query.fieldType()))
+                        .dbColumnType(convert.processTypeConvert(entity.getStr(query.fieldType())))
                         .fieldComment(entity.getStr(query.fieldComment()))
                         .fieldKey(entity.getStr(query.fieldKey()))
                         .build();
@@ -79,6 +109,12 @@ public class DataSourceHuTool {
         }
     }
 
+    /**
+     * 根据url获取数据库类型
+     *
+     * @param url 数据库连接url
+     * @return IDbQuery
+     */
     public static IDbQuery getDbQuery(String url) {
         DbType dbType = getDbType(url);
         DbQueryRegistry dbQueryRegistry = new DbQueryRegistry();
@@ -87,6 +123,24 @@ public class DataSourceHuTool {
                 .orElseGet(() -> dbQueryRegistry.getDbQuery(DbType.MYSQL));
     }
 
+    /**
+     * 根据url获取类型注册器
+     *
+     * @param url 数据库连接url
+     * @return ITypeConvert
+     */
+    public static ITypeConvert getConvert(String url) {
+        DbType dbType = getDbType(url);
+        return TypeConverts.getTypeConvert(dbType);
+    }
+
+
+    /**
+     * 根据url获取数据库类型
+     *
+     * @param url 数据库连接url
+     * @return 数据库类型
+     */
     private static DbType getDbType(@NotNull String url) {
         url = url.toLowerCase();
         if (url.contains(":mysql:") || url.contains(":cobar:")) {

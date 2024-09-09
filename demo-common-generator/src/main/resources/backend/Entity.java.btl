@@ -1,0 +1,45 @@
+package ${packageName}.entity;
+
+<% for(pkg in importPackages){ %>
+import ${pkg};
+<% } %>
+<% if(swagger) { %>
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+<% } else if(springdoc) { %>
+import io.swagger.v3.oas.annotations.media.Schema;
+<% } %>
+import lombok.Data;
+
+/**
+ * ${tableComment}(${className})实体
+ *
+ * @author ${authorName}
+ * @Date ${createTime}
+ **/
+@Data
+<% if(swagger) { %>
+@ApiModel(value = "${className}对象", description = "${tableComment}")
+<% } else if(springdoc) { %>
+@Schema(name = "${className}对象", description = "${tableComment}")
+<% } %>
+public class ${className} {
+
+    <% for(var i = 0; i < configList.~size; i++) { %>
+    // ${configList[i].fieldComment}
+    <% if(configList[i].isKeyId) { %>
+    @TableId
+    <% } %>
+    <% if(configList[i].isLogicDelete) { %>
+    @TableLogic
+    @JsonIgnore
+    <% } %>
+    <% if(swagger) { %>
+    @ApiModelProperty(value = "${configList[i].fieldComment}"<% if(configList[i].isLogicDelete) { %>, hidden = true<% } %>)
+    <% } else if(springdoc) { %>
+    @Schema(value = "${configList[i].fieldComment}"<% if(configList[i].isLogicDelete) { %>, hidden = true<% } %>)
+    <% } %>
+    private ${configList[i].fieldJavaType} ${configList[i].fieldNameCamelCase};
+
+    <% } %>
+}

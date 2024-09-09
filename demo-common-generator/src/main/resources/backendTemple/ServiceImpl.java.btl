@@ -1,15 +1,3 @@
-/*
- * Copyright [2022] [https://www.xiaonuo.vip]
- *
- * Snowy采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意以下几点：
- *
- * 1.请不要删除和修改根目录下的LICENSE文件。
- * 2.请不要删除和修改Snowy源码头部的版权声明。
- * 3.本项目代码可免费商业使用，商业使用请保留源码和相关描述文件的项目出处，作者声明等。
- * 4.分发源码时候，请注明软件出处 https://www.xiaonuo.vip
- * 5.不可二次分发开源参与同类竞品，如有想法可联系团队xiaonuobase@qq.com商议合作。
- * 6.若您的项目无法满足以上几点，需要更多功能代码，获取Snowy商业授权许可，请在官网购买授权，地址为 https://www.xiaonuo.vip
- */
 package ${packageName}.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
@@ -84,7 +72,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     @Override
     public void edit(${className}EditParam ${classNameFirstLower}EditParam) {
         <% for(var i = 0; i < configList.~size; i++) { %>
-        <% if(configList[i].needTableId) { %>
+        <% if(configList[i].isKeyId) { %>
         ${className} ${classNameFirstLower} = this.queryEntity(${classNameFirstLower}EditParam.get${configList[i].fieldNameCamelCaseFirstUpper}());
         <% } %>
         <% } %>
@@ -97,7 +85,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     public void delete(List<${className}IdParam> ${classNameFirstLower}IdParamList) {
         // 执行删除
         <% for(var i = 0; i < configList.~size; i++) { %>
-        <% if(configList[i].needTableId) { %>
+        <% if(configList[i].isKeyId) { %>
         this.removeByIds(CollStreamUtil.toList(${classNameFirstLower}IdParamList, ${className}IdParam::get${configList[i].fieldNameCamelCaseFirstUpper}));
         <% } %>
         <% } %>
@@ -106,7 +94,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     @Override
     public ${className} detail(${className}IdParam ${classNameFirstLower}IdParam) {
         <% for(var i = 0; i < configList.~size; i++) { %>
-        <% if(configList[i].needTableId) { %>
+        <% if(configList[i].isKeyId) { %>
         return this.queryEntity(${classNameFirstLower}IdParam.get${configList[i].fieldNameCamelCaseFirstUpper}());
         <% } %>
         <% } %>

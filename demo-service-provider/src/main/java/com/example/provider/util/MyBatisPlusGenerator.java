@@ -1,9 +1,7 @@
 package com.example.provider.util;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
-import com.baomidou.mybatisplus.generator.engine.BeetlTemplateEngine;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
 
 import java.nio.file.Paths;
 
@@ -19,6 +17,7 @@ public class MyBatisPlusGenerator {
                         .author("diaoyn")
                         .outputDir(Paths.get(System.getProperty("user.dir")) + "/demo-service-provider" + "/src/main/java")
                         .commentDate("yyyy-MM-dd")
+                        .enableSpringdoc()
                 )
                 .packageConfig(builder -> builder
                         .parent("com.example.provider")

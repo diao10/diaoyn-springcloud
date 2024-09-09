@@ -17,9 +17,7 @@ import org.beetl.core.resource.ClasspathResourceLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author diaoyn
@@ -27,14 +25,21 @@ import java.util.Map;
  * @Date 2024/9/4 13:31
  */
 public class CodeGenerator {
+
+    /**
+     * 开启 swagger 模式（默认 false 与 springdoc 不可同时使用）
+     */
+    private static boolean swagger = false;
+    /**
+     * 开启 springdoc 模式（默认 false 与 swagger 不可同时使用）
+     */
+    private static boolean springdoc = false;
+
     private static final String CREATE_USER_KEY = "CREATE_USER";
-
     private static final String CREATE_TIME_KEY = "CREATE_TIME";
-
     private static final String UPDATE_USER_KEY = "UPDATE_USER";
-
     private static final String UPDATE_TIME_KEY = "UPDATE_TIME";
-    private static final String DELETE_FLAG_KEY = "DELETE_FLAG";
+    private static final String DELETE_FLAG_KEY = "DEL_FLAG";
 
     private static final List<JSONObject> GEN_SQL_FILE_LIST = CollectionUtil.newArrayList(
             JSONUtil.createObj().set("name", "Mysql.sql.btl"),
@@ -54,14 +59,13 @@ public class CodeGenerator {
             JSONUtil.createObj().set("name", "index.vue.btl").set("path", "pages")
     );
 
-
     private static final List<JSONObject> GEN_BACKEND_FILE_LIST = CollectionUtil.newArrayList(
-//            JSONUtil.createObj().set("name", "Controller.java.btl").set("path", "controller")
+            JSONUtil.createObj().set("name", "Controller.java.btl").set("path", "controller"),
             JSONUtil.createObj().set("name", "Entity.java.btl").set("path", "entity"),
 //            JSONUtil.createObj().set("name", "Enum.java.btl").set("path", "enums"),
             JSONUtil.createObj().set("name", "Mapper.java.btl").set("path", "mapper"),
-//            JSONUtil.createObj().set("name", "Mapper.xml.btl").set("path", "mapper" + File.separator + "mapping"),
-//            JSONUtil.createObj().set("name", "AddParam.java.btl").set("path", "param"),
+            JSONUtil.createObj().set("name", "Mapper.xml.btl").set("path", "mapper" + File.separator + "xml"),
+            JSONUtil.createObj().set("name", "Vo.java.btl").set("path", "vo"),
 //            JSONUtil.createObj().set("name", "EditParam.java.btl").set("path", "param"),
 //            JSONUtil.createObj().set("name", "IdParam.java.btl").set("path", "param"),
 //            JSONUtil.createObj().set("name", "PageParam.java.btl").set("path", "param"),
@@ -69,6 +73,19 @@ public class CodeGenerator {
             JSONUtil.createObj().set("name", "ServiceImpl.java.btl").set("path", "service" + File.separator + "impl")
     );
 
+    /**
+     * 开启 swagger 模式
+     */
+    public static void enableSwagger() {
+        swagger = true;
+    }
+
+    /**
+     * 开启 springdoc 模式
+     */
+    public static void enableSpringdoc() {
+        springdoc = true;
+    }
 
     public static void execute(String url, String user, String password, String moduleName, String packageName,
                                String... tableNames) {
@@ -85,7 +102,7 @@ public class CodeGenerator {
     public static void executeBackend(String moduleName, String packageName, TableDto tableDto,
                                       List<FieldDto> fieldDtoList) {
         try {
-            GroupTemplate groupTemplate = new GroupTemplate(new ClasspathResourceLoader("backend2"),
+            GroupTemplate groupTemplate = new GroupTemplate(new ClasspathResourceLoader("backend"),
                     Configuration.defaultConfiguration());
             Map<String, Object> bindMap = initBinding(packageName, tableDto, fieldDtoList);
             GEN_BACKEND_FILE_LIST.forEach(t -> {
@@ -114,6 +131,7 @@ public class CodeGenerator {
 
     public static Map<String, Object> initBinding(String packageName, TableDto tableDto, List<FieldDto> fieldDtoList) {
         Map<String, Object> map = new HashMap<>();
+        Set<String> importPackages = new HashSet<>();
         // 代码模块名
 //        map.put("moduleName", genBasic.getModuleName());
         // 功能名
@@ -122,6 +140,12 @@ public class CodeGenerator {
 //        map.put("busName", genBasic.getBusName());
         // 包名
         map.put("packageName", packageName);
+        // 开启 swagger 模式
+        map.put("swagger", swagger);
+        if (!swagger) {
+            // 开启 springdoc 模式
+            map.put("springdoc", springdoc);
+        }
 
 //        // 类首字母小写名
 //        map.put("classNameFirstLower", StrUtil.lowerFirst(genBasic.getClassName()));
@@ -170,9 +194,11 @@ public class CodeGenerator {
         // 表名
         map.put("tableName", tableDto.getTableName());
         // 注释名
-        map.put("tableComment", tableDto.getTableComment());
+        map.put("tableComment", StrUtil.removeSuffix(tableDto.getTableComment(), "表"));
         // 类名
         map.put("className", tableDto.getTableNameCamelCaseFirstUpper());
+        // 表名驼峰
+        map.put("classNameCamelCase", tableDto.getTableNameCamelCase());
         // 定义配置详情列表
         List<JSONObject> configList = CollectionUtil.newArrayList();
         fieldDtoList.forEach(fieldDto -> {
@@ -180,26 +206,35 @@ public class CodeGenerator {
             // 字段驼峰名
             configItem.set("fieldNameCamelCase", StrUtil.toCamelCase(fieldDto.getFieldName()));
             // 主键
-            configItem.set("needTableId", false);
+            configItem.set("isKeyId", false);
             if (StrUtil.isNotBlank(fieldDto.getFieldKey())) {
-                configItem.set("needTableId", true);
+                configItem.set("isKeyId", true);
+                importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
             }
             // 实体类型
-            configItem.set("fieldJavaType", fieldDto.getFieldType());
+            configItem.set("fieldJavaType", fieldDto.getDbColumnType().getType());
+            importPackages.add(fieldDto.getDbColumnType().getPkg());
             // 字段注释
             configItem.set("fieldComment", fieldDto.getFieldComment());
             // 是否需要逻辑删除
-            configItem.set("needLogicDelete", DELETE_FLAG_KEY.equalsIgnoreCase(fieldDto.getFieldName()));
+            configItem.set("isLogicDelete", DELETE_FLAG_KEY.equalsIgnoreCase(fieldDto.getFieldName()));
+            if (configItem.getBool("isLogicDelete")) {
+                importPackages.add("com.baomidou.mybatisplus.annotation.TableLogic");
+                importPackages.add("com.fasterxml.jackson.annotation.JsonIgnore");
+            }
             // 是否需要自动插入
-            configItem.set("needAutoInsert",
+            configItem.set("isAutoInsert",
                     CREATE_USER_KEY.equalsIgnoreCase(fieldDto.getFieldName()) || CREATE_TIME_KEY.equalsIgnoreCase(fieldDto.getFieldName()));
             // 是否需要自动更新
-            configItem.set("needAutoUpdate",
+            configItem.set("isAutoUpdate",
                     UPDATE_USER_KEY.equalsIgnoreCase(fieldDto.getFieldName()) || UPDATE_TIME_KEY.equalsIgnoreCase(fieldDto.getFieldName()));
             configList.add(configItem);
         });
         // 配置信息
         map.put("configList", configList);
+        // 导入包
+        importPackages.remove(null);
+        map.put("importPackages", importPackages);
 
 //        // 定义是否有排序字段
 //        AtomicBoolean hasSortCodeField = new AtomicBoolean(false);
@@ -232,7 +267,7 @@ public class CodeGenerator {
 //                            configItem.set("needPage", false);
 //                            configItem.set("needPageType", "none");
 //                            configItem.set("required", false);
-//                            configItem.set("needTableId", false);
+//                            configItem.set("isKeyId", false);
 //                        } else {
 //                            boolean needAddAndUpdate = genConfig.getWhetherAddUpdate().equalsIgnoreCase
 //                            (GenYesNoEnum.Y.getValue());
@@ -243,7 +278,7 @@ public class CodeGenerator {
 //                            configItem.set("needPageType", genConfig.getQueryType());
 //                            configItem.set("required", genConfig.getWhetherRequired().equalsIgnoreCase(GenYesNoEnum
 //                            .Y.getValue()));
-//                            configItem.set("needTableId", false);
+//                            configItem.set("isKeyId", false);
 //                        }
 //                    }
 //                    // 列显示
@@ -278,13 +313,12 @@ public class CodeGenerator {
 
 
     public static void main(String[] args) {
-
-        CodeGenerator.execute("jdbc:mysql://localhost:3306/demo?serverTimezone=GMT%2B8&useUnicode=true" +
-                        "&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements" +
-                        "=true",
+        CodeGenerator.enableSwagger();
+        CodeGenerator.execute("jdbc:mysql://192.168.0.200:3306/test-system?characterEncoding=UTF-8&useUnicode=true" +
+                        "&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai",
                 "root",
                 "root",
                 "demo-common-generator",
-                "com.example");
+                "com.example", "cs_daily");
     }
 }

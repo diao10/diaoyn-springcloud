@@ -4,14 +4,14 @@
 	var row = 0;
 	%>
 	<% for(var i = 0; i < configList.~size; i++) { %>
-		<% if(!configList[i].needTableId && configList[i].needPage) { searchCount ++; }%>
+		<% if(!configList[i].isKeyId && configList[i].needPage) { searchCount ++; }%>
 	<% } %>
 	<a-card :bordered="false">
 		<% if (searchCount > 0) { %>
 		<a-form ref="searchFormRef" name="advanced_search" :model="searchFormState" class="ant-advanced-search-form">
 			<a-row :gutter="24">
 				<% for(var i = 0; i < configList.~size; i++) { %>
-				<% if(!configList[i].needTableId && configList[i].needPage) { row ++; %>
+				<% if(!configList[i].isKeyId && configList[i].needPage) { row ++; %>
 				<% if(row <= 3) { %>
 				<a-col :span="6">
 				<% if(configList[i].effectType == 'input' || configList[i].effectType == 'textarea') { %>
@@ -83,7 +83,7 @@
 			:alert="options.alert.show"
 			bordered
 			<% for(var i = 0; i < configList.~size; i++) { %>
-			<% if(configList[i].needTableId) { %>
+			<% if(configList[i].isKeyId) { %>
 			:row-key="(record) => record.${configList[i].fieldNameCamelCase}"
 			<% } %>
 			<% } %>
@@ -105,7 +105,7 @@
 			</template>
 			<template #bodyCell="{ column, record }">
 				<% for(var i = 0; i < configList.~size; i++) { %>
-				<% if(!configList[i].needTableId && configList[i].whetherTable) { %>
+				<% if(!configList[i].isKeyId && configList[i].whetherTable) { %>
 				<% if (configList[i].effectType == 'select' || configList[i].effectType == 'radio') { %>
 				<template v-if="column.dataIndex === '${configList[i].fieldNameCamelCase}'">
 					{{ $TOOL.dictTypeData('${configList[i].dictTypeCode}', record.${configList[i].fieldNameCamelCase}) }}
@@ -137,7 +137,7 @@
 	var iptTool = 0;
 	if (searchCount > 0) {
 		for(var i = 0; i < configList.~size; i++) {
-			if(!configList[i].needTableId) {
+			if(!configList[i].isKeyId) {
 			if(configList[i].effectType == 'select' || configList[i].effectType == 'radio' || configList[i].effectType == 'checkbox') {
 				iptTool++;
 			}
@@ -167,7 +167,7 @@
 	<% } %>
 	const columns = [
 	<% for(var i = 0; i < configList.~size; i++) { %>
-	<% if(!configList[i].needTableId && configList[i].whetherTable) { %>
+	<% if(!configList[i].isKeyId && configList[i].whetherTable) { %>
 		{
 			title: '${configList[i].fieldRemark}',
 			dataIndex: '${configList[i].fieldNameCamelCase}'<% if(configList[i].whetherRetract) { %>,<% } %>
@@ -207,7 +207,7 @@
 		<% if (searchCount > 0) { %>
 		const searchFormParam = cloneDeep(searchFormState.value)
 		<% for(var i = 0; i < configList.~size; i++) { %>
-		<% if(!configList[i].needTableId && configList[i].needPage) { %>
+		<% if(!configList[i].isKeyId && configList[i].needPage) { %>
 		<% if (configList[i].effectType == 'datepicker') {%>
 		// ${configList[i].fieldNameCamelCase}范围查询条件重载
 		if (searchFormParam.${configList[i].fieldNameCamelCase}) {
@@ -235,7 +235,7 @@
 		let params = [
 			{
 				<% for(var i = 0; i < configList.~size; i++) { %>
-				<% if(configList[i].needTableId) { %>
+				<% if(configList[i].isKeyId) { %>
 				${configList[i].fieldNameCamelCase}: record.${configList[i].fieldNameCamelCase}
 				<% } %>
 				<% } %>
@@ -253,7 +253,7 @@
 	}
 	<% if (searchCount > 0) { %>
 	<% for(var i = 0; i < configList.~size; i++) { %>
-	<% if(!configList[i].needTableId && configList[i].needPage) { %>
+	<% if(!configList[i].isKeyId && configList[i].needPage) { %>
 	<% if (configList[i].effectType == 'select' || configList[i].effectType == 'radio' || configList[i].effectType == 'checkbox') { %>
 	const ${configList[i].fieldNameCamelCase}Options = tool.dictList('${configList[i].dictTypeCode}')
 	<% } %>

@@ -1,7 +1,7 @@
 <template>
 	<xn-form-container
 		<% for(var i = 0; i < configList.~size; i++) { %>
-		<% if(configList[i].needTableId) { %>
+		<% if(configList[i].isKeyId) { %>
 		:title="formData.${configList[i].fieldNameCamelCase} ? '编辑${functionName}' : '增加${functionName}'"
 		<% } %>
 		<% } %>
@@ -14,7 +14,7 @@
 		<% if(gridWhether) { %>
 			<a-row :gutter="16">
 			<% for(var i = 0; i < configList.~size; i++) { %>
-			<% if(!configList[i].needTableId && configList[i].whetherAddUpdate) { %>
+			<% if(!configList[i].isKeyId && configList[i].whetherAddUpdate) { %>
 				<a-col :span="12">
 					<a-form-item label="${configList[i].fieldRemark}：" name="${configList[i].fieldNameCamelCase}">
 						<% if(configList[i].effectType == 'input') { %>
@@ -43,7 +43,7 @@
 			</a-row>
 		<% } else { %>
 		<% for(var i = 0; i < configList.~size; i++) { %>
-		<% if(!configList[i].needTableId && configList[i].whetherAddUpdate) { %>
+		<% if(!configList[i].isKeyId && configList[i].whetherAddUpdate) { %>
 			<a-form-item label="${configList[i].fieldRemark}：" name="${configList[i].fieldNameCamelCase}">
 				<% if(configList[i].effectType == 'input') { %>
 				<a-input v-model:value="formData.${configList[i].fieldNameCamelCase}" placeholder="请输入${configList[i].fieldRemark}" allow-clear />
@@ -80,7 +80,7 @@
 	<%
 	var iptTool = 0;
 	for(var i = 0; i < configList.~size; i++) {
-		if(!configList[i].needTableId) {
+		if(!configList[i].isKeyId) {
 		if(configList[i].effectType == 'select' || configList[i].effectType == 'radio' || configList[i].effectType == 'checkbox') {
 			iptTool++;
 		}
@@ -101,7 +101,7 @@
 	const formData = ref({})
 	const submitLoading = ref(false)
 	<% for(var i = 0; i < configList.~size; i++) { %>
-	<% if(!configList[i].needTableId) { %>
+	<% if(!configList[i].isKeyId) { %>
 	<% if(configList[i].effectType == 'select' || configList[i].effectType == 'radio' || configList[i].effectType == 'checkbox') { %>
 	const ${configList[i].fieldNameCamelCase}Options = ref([])
 	<% } %>
@@ -114,14 +114,14 @@
 		if (record) {
 			let recordData = cloneDeep(record)
 			<% for(var i = 0; i < configList.~size; i++) { %>
-			<% if(!configList[i].needTableId && configList[i].whetherAddUpdate && configList[i].effectType == 'checkbox') { %>
+			<% if(!configList[i].isKeyId && configList[i].whetherAddUpdate && configList[i].effectType == 'checkbox') { %>
 			recordData.${configList[i].fieldNameCamelCase} = JSON.parse(recordData.${configList[i].fieldNameCamelCase})
 			<% } %>
 			<% } %>
 			formData.value = Object.assign({}, recordData)
 		}
 		<% for(var i = 0; i < configList.~size; i++) { %>
-		<% if(!configList[i].needTableId) { %>
+		<% if(!configList[i].isKeyId) { %>
 		<% if(configList[i].effectType == 'select' || configList[i].effectType == 'radio' || configList[i].effectType == 'checkbox') { %>
 		${configList[i].fieldNameCamelCase}Options.value = tool.dictList('${configList[i].dictTypeCode}')
 		<% } %>
@@ -137,7 +137,7 @@
 	// 默认要校验的
 	const formRules = {
 		<% for(var i = 0; i < configList.~size; i++) { %>
-		<% if(!configList[i].needTableId) { %>
+		<% if(!configList[i].isKeyId) { %>
 		<% if(configList[i].required) { %>
 		${configList[i].fieldNameCamelCase}: [required('请输入${configList[i].fieldRemark}')],
 		<% } %>
@@ -158,7 +158,7 @@
 				<% } %>
 				${classNameFirstLower}Api
 					<% for(var i = 0; i < configList.~size; i++) { %>
-					<% if(configList[i].needTableId) { %>
+					<% if(configList[i].isKeyId) { %>
 					.${classNameFirstLower}SubmitForm(formDataParam, formDataParam.${configList[i].fieldNameCamelCase})
 					<% } %>
 					<% } %>

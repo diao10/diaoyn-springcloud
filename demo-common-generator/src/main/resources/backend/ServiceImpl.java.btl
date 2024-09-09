@@ -7,7 +7,7 @@ import ${packageName}.mapper.${className}Mapper;
 import ${packageName}.service.${className}Service;
 
 /**
- * ${tableComment}(${className})Service接口实现类
+ * ${tableComment}(${className})ServiceImpl接口实现类
  *
  * @author ${authorName}
  * @Date ${createTime}

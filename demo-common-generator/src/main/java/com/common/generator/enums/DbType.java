@@ -1,10 +1,14 @@
 package com.common.generator.enums;
 
+import lombok.Getter;
+
 /**
+ * 数据库类型
  * @author diaoyn
  * @ClassName DbType
  * @Date 2024/9/6 10:32
  */
+@Getter
 public enum DbType {
     MYSQL("mysql", "MySql数据库"),
     MARIADB("mariadb", "MariaDB数据库"),
@@ -82,14 +86,6 @@ public enum DbType {
 
     public boolean postgresqlSameType() {
         return this == POSTGRE_SQL || this == H2 || this == LEALONE || this == SQLITE || this == HSQL || this == KINGBASE_ES || this == PHOENIX || this == SAP_HANA || this == IMPALA || this == HIGH_GO || this == VERTICA || this == REDSHIFT || this == OPENGAUSS || this == TDENGINE || this == UXDB || this == GBASE8S_PG || this == GBASE_8C;
-    }
-
-    public String getDb() {
-        return this.db;
-    }
-
-    public String getDesc() {
-        return this.desc;
     }
 
     private DbType(final String db, final String desc) {

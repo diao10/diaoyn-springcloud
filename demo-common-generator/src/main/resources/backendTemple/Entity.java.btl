@@ -19,17 +19,17 @@ public class ${className} {
 
     <% for(var i = 0; i < configList.~size; i++) { %>
     /** ${configList[i].fieldComment} */
-    <% if(configList[i].needTableId) { %>
+    <% if(configList[i].isKeyId) { %>
     @TableId
     <% } else { %><% } %>
     @Schema(description = "${configList[i].fieldComment}")
-    <% if(configList[i].needAutoInsert) { %>
+    <% if(configList[i].isAutoInsert) { %>
     @TableField(fill = FieldFill.INSERT)
     <% } else { %><% } %>
-    <% if(configList[i].needAutoUpdate) { %>
+    <% if(configList[i].isAutoUpdate) { %>
     @TableField(fill = FieldFill.UPDATE)
     <% } else { %><% } %>
-    <% if(configList[i].needLogicDelete) { %>
+    <% if(configList[i].isLogicDelete) { %>
     @TableLogic
     @TableField(fill = FieldFill.INSERT)
     <% } else { %><% } %>
