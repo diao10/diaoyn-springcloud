@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.example</groupId>
-    <artifactId>demo-springcloud</artifactId>
+    <groupId>com.diaoyn</groupId>
+    <artifactId>diaoyn-springcloud</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>demo-springcloud</name>
-    <description>demo-springcloud</description>
+    <name>diaoyn-spring-cloud</name>
+    <description>diaoyn-spring-cloud</description>
     <packaging>pom</packaging>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -14,12 +14,13 @@
         <version>2.7.3</version>
     </parent>
     <modules>
-        <module>demo-common</module>
-        <module>demo-common-generator</module>
-        <module>demo-gateway</module>
-        <module>demo-service-provider</module>
-        <module>demo-service-consumer</module>
-        <module>demo-service-plugin</module>
+        <module>diaoyn-common</module>
+        <module>diaoyn-common-generator</module>
+        <module>diaoyn-gateway</module>
+        <module>diaoyn-service-provider</module>
+        <module>diaoyn-service-consumer</module>
+        <module>diaoyn-service-plugin</module>
+        <module>diaoyn-service-alone</module>
 
     </modules>
     <properties>
@@ -30,7 +31,7 @@
         <spring-cloud-alibaba.version>2021.0.1.0</spring-cloud-alibaba.version>
         <hutool.version>5.8.25</hutool.version>
         <lombok.version>1.18.24</lombok.version>
-        <demo.version>1.0.0-SNAPSHOT</demo.version>
+        <diaoyn.version>1.0.0-SNAPSHOT</diaoyn.version>
         <knife4j.version>3.0.3</knife4j.version>
         <validation.version>3.2.0</validation.version>
         <spring.cloud.version>3.1.3</spring.cloud.version>
@@ -61,15 +62,15 @@
             </dependency>
 
             <dependency>
-                <groupId>com.example</groupId>
-                <artifactId>demo-common</artifactId>
-                <version>${demo.version}</version>
+                <groupId>com.diaoyn</groupId>
+                <artifactId>diaoyn-common</artifactId>
+                <version>${diaoyn.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.example</groupId>
-                <artifactId>demo-service-plugin</artifactId>
-                <version>${demo.version}</version>
+                <groupId>com.diaoyn</groupId>
+                <artifactId>diaoyn-service-plugin</artifactId>
+                <version>${diaoyn.version}</version>
             </dependency>
 
             <dependency>

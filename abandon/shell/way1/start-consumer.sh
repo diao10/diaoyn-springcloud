@@ -1,6 +1,6 @@
 #!/bin/bash
 #这里可替换为所需执行程序名称，其他代码无需更改
-APP_NAME="demo-service-consumer"
+APP_NAME="diaoyn-service-consumer"
 #引入通用部署配置
 . /home/bhb/shell/common-deploy-cfg.sh
 #启动方法
@@ -16,8 +16,8 @@ start(){
 	#扫描本地其他路劲配置：--spring.config.locations=${YML_PATH}/服务名/nohup_服务名简写.out
 	#输出.out日志 nohup java -jar ... *.jar > ${LOG_OUT_PATH}/nohup_batch.out 2>&1 &
 	#不输出.out日志 nohup java -jar ... *.jar > /dev/null 2>&1 &
-    nohup java -jar ${APP_PATH}/${APP_NAME}.jar --spring.profiles.active=${PROFILE} --spring.config.location=${YML_PATH}/demo-service-consumer/bootstrap.yml > ${LOG_PATH}/demo-service-consumer/demo-service-consumer.out 2>&1 &
-    echo 'Start success active='${PROFILE}' LOG_PATH is '${LOG_PATH}'/demo-service-consumer/demo-service-consumer.out'
+    nohup java -jar ${APP_PATH}/${APP_NAME}.jar --spring.profiles.active=${PROFILE} --spring.config.location=${YML_PATH}/diaoyn-service-consumer/bootstrap.yml > ${LOG_PATH}/diaoyn-service-consumer/diaoyn-service-consumer.out 2>&1 &
+    echo 'Start success active='${PROFILE}' LOG_PATH is '${LOG_PATH}'/diaoyn-service-consumer/diaoyn-service-consumer.out'
  fi
 }
 #引入通用部署工具

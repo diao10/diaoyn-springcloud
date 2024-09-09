@@ -9,7 +9,7 @@ set home=%cd%\server\
 ::端口
 set port=8406
 ::jar包名称
-set jar_name=demo-service-consumer.jar
+set jar_name=diaoyn-service-consumer.jar
 ::运行环境
 set profiles=test
 

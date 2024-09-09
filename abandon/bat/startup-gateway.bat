@@ -9,7 +9,7 @@ set home=%cd%\server\
 ::端口
 set port=8721
 ::jar包名称
-set jar_name=demo-gateway.jar
+set jar_name=diaoyn-gateway.jar
 ::运行环境
 set profiles=test
 
