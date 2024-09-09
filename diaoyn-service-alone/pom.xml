@@ -107,7 +107,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.diaoyn.alone.DemoServiceAloneApplication</mainClass>
+                    <mainClass>com.diaoyn.alone.AloneApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <!--                <executions>-->

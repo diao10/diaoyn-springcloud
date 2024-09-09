@@ -4,7 +4,7 @@ spring:
   profiles:
     active: dev
   application:
-    name: provider
+    name: alone
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
