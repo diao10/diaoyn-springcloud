@@ -20,3 +20,6 @@ spring:
 springfox:
   documentation:
     enabled: false
+
+multiple:
+  type: 11

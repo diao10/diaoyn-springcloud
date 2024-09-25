@@ -19,3 +19,6 @@ spring:
 springfox:
   documentation:
     enabled: true
+
+multiple:
+  type: 00
