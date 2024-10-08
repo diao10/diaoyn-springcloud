@@ -1,4 +1,4 @@
-package com.diaoyn.common.handle;
+package com.diaoyn.common.handler;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModelProperty;

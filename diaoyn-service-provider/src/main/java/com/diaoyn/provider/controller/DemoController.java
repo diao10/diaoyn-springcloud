@@ -1,6 +1,6 @@
 package com.diaoyn.provider.controller;
 
-import com.diaoyn.common.handle.ApiModelPropertyPropertyBuilderJson;
+import com.diaoyn.common.handler.ApiModelPropertyPropertyBuilderJson;
 import com.diaoyn.common.vo.DemoRepVO;
 import com.diaoyn.common.vo.DemoVO;
 import com.diaoyn.common.vo.ResponseVO;

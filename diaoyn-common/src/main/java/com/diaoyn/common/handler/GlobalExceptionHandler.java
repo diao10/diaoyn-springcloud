@@ -1,4 +1,4 @@
-package com.diaoyn.common.handle;
+package com.diaoyn.common.handler;
 
 import com.diaoyn.common.config.BizException;
 import com.diaoyn.common.vo.ResponseVO;
