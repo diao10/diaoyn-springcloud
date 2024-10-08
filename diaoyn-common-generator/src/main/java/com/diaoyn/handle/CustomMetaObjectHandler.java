@@ -4,14 +4,14 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
-import org.springframework.stereotype.Component;
 
 /**
  * @author diaoyn
  * @ClassName CustomMetaObjectHandler
  * @Date 2024/9/6 13:24
  */
-@Component
+// TODO: 2024/10/8 这个class是配合web使用的
+//@Component
 public class CustomMetaObjectHandler implements MetaObjectHandler {
 
     /**

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.diaoyn.alone.demos.web;
+package com.diaoyn.alone.controller;
 
 import lombok.Data;
 
