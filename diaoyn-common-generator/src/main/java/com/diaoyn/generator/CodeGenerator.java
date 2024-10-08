@@ -384,7 +384,7 @@ public class CodeGenerator {
                         "&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai",
                 "root",
                 "root",
-                "ddd",
+                "diaoyn-common-generator",
                 "com.diaoyn.example", "cs_daily");
     }
 }
