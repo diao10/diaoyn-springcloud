@@ -5,6 +5,7 @@ import com.diaoyn.common.vo.DemoVO;
 import com.diaoyn.common.vo.ResponseVO;
 import com.diaoyn.provider.aspect.AutoLog;
 import com.diaoyn.provider.service.DemoService;
+import com.diaoyn.provider.vo.rep.CommonRepVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
@@ -58,4 +59,11 @@ public class DemoController {
         });
         return emitter;
     }
+
+    @ApiOperation(value = "仅展示swagger的response", response = CommonRepVo.class)
+    @GetMapping("/showResponse")
+    public ResponseVO<?> showResponse() {
+        return null;
+    }
+
 }
