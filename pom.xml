@@ -39,6 +39,7 @@
         <mybatis-plus.version>3.5.6</mybatis-plus.version>
         <poi-ooxml.version>5.2.5</poi-ooxml.version>
         <sevenzipjbinding.version>16.02-2.01</sevenzipjbinding.version>
+        <fastjson.version>2.0.52</fastjson.version>
     </properties>
 
     <dependencyManagement>
@@ -147,6 +148,12 @@
                 <groupId>net.sf.sevenzipjbinding</groupId>
                 <artifactId>sevenzipjbinding-all-platforms</artifactId>
                 <version>${sevenzipjbinding.version}</version>
+            </dependency>
+            <!-- json -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

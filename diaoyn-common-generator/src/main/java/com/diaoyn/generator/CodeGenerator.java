@@ -34,7 +34,9 @@ public class CodeGenerator {
      * 开启 springdoc 模式（默认 false 与 swagger 不可同时使用）
      */
     private static boolean springdoc = false;
-
+    /**
+     * 一些公用的字段
+     */
     private static final String CREATE_USER_KEY = "CREATE_USER";
     private static final String CREATE_TIME_KEY = "CREATE_TIME";
     private static final String UPDATE_USER_KEY = "UPDATE_USER";
@@ -46,9 +48,11 @@ public class CodeGenerator {
             JSONUtil.createObj().set("name", "Oracle.sql.btl"));
 
     private static final List<JSONObject> GEN_FRONT_FILE_LIST = CollectionUtil.newArrayList(
-            JSONUtil.createObj().set("name", "Api.js.btl").set("path", "api"),
-            JSONUtil.createObj().set("name", "form.vue.btl").set("path", "views"),
-            JSONUtil.createObj().set("name", "index.vue.btl").set("path", "views"));
+            JSONUtil.createObj().set("name", "Api.ts.btl").set("path", "api"),
+//            JSONUtil.createObj().set("name", "Api.js.btl").set("path", "api"),
+//            JSONUtil.createObj().set("name", "form.vue.btl").set("path", "views"),
+            JSONUtil.createObj().set("name", "index.vue.btl").set("path", "views")
+    );
 
     private static final List<JSONObject> GEN_MOBILE_FILE_LIST = CollectionUtil.newArrayList(
             JSONUtil.createObj().set("name", "page.json.btl"),
@@ -87,6 +91,14 @@ public class CodeGenerator {
         springdoc = true;
     }
 
+    /**
+     * @param url         数据库地址
+     * @param user        数据库账号
+     * @param password    数据库密码
+     * @param moduleName  模块名称
+     * @param packageName 包名称
+     * @param tableNames  表名称集合
+     */
     public static void execute(String url, String user, String password, String moduleName, String packageName,
                                String... tableNames) {
         System.out.println("==========================准备生成文件...==========================");
@@ -95,10 +107,19 @@ public class CodeGenerator {
         for (TableDto tableDto : tableDtoList) {
             List<FieldDto> fieldDtoList = DataSourceHuTool.getField(url, user, password, tableDto.getTableName());
             executeBackend(moduleName, packageName, tableDto, fieldDtoList);
+            executeFrontend(moduleName, packageName, tableDto, fieldDtoList);
         }
         System.out.println("==========================文件生成完成！！！==========================");
     }
 
+    /**
+     * 生成后端代码
+     *
+     * @param moduleName   模块名称
+     * @param packageName  包名称
+     * @param tableDto     表名称
+     * @param fieldDtoList 字段列表
+     */
     public static void executeBackend(String moduleName, String packageName, TableDto tableDto,
                                       List<FieldDto> fieldDtoList) {
         try {
@@ -128,7 +149,66 @@ public class CodeGenerator {
         }
     }
 
+    //生成前端代码
+    public static void executeFrontend(String moduleName, String packageName, TableDto tableDto,
+                                       List<FieldDto> fieldDtoList) {
+//        try {
+//            GroupTemplate groupTemplate = new GroupTemplate(new ClasspathResourceLoader("backend"),
+//                    Configuration.defaultConfiguration());
+//            Map<String, Object> bindMap = initBinding(packageName, tableDto, fieldDtoList);
+//            GEN_FRONT_FILE_LIST.forEach(fileJsonObject -> {
+//                String fileTemplateName = fileJsonObject.getStr("name");
+//                String fileTemplatePath = fileJsonObject.getStr("path") + File.separator + genBasic.getModuleName();
+//                GenBasicPreviewResult.GenBasicCodeResult genBasicCodeFrontResult =
+//                        new GenBasicPreviewResult.GenBasicCodeResult();
+//                Template templateFront = groupTemplateFront.getTemplate(fileTemplateName);
+//                templateFront.binding(bindingJsonObject);
+//                String resultName = StrUtil.removeSuffix(fileTemplateName, ".btl");
+//                if ("Api.js.btl".equalsIgnoreCase(fileTemplateName)) {
+//                    resultName = StrUtil.lowerFirst(genBasic.getClassName()) + resultName;
+//                    genBasicCodeFrontResult.setCodeFileName(resultName);
+//                    genBasicCodeFrontResult.setCodeFileWithPathName(genFrontBasicPath + fileTemplatePath + File
+//                    .separator + resultName);
+//                } else {
+//                    genBasicCodeFrontResult.setCodeFileName(resultName);
+//                    genBasicCodeFrontResult.setCodeFileWithPathName(genFrontBasicPath + fileTemplatePath + File
+//                    .separator + genBasic.getBusName() + File.separator + resultName);
+//                }
+//                genBasicCodeFrontResult.setCodeFileContent(templateFront.render());
+//                genBasicCodeFrontendResultList.add(genBasicCodeFrontResult);
+//            });
+//
+//            GEN_BACKEND_FILE_LIST.forEach(t -> {
+//                Template templateBackend = groupTemplate.getTemplate(t.getStr("name"));
+//                templateBackend.binding(bindMap);
+//                String userDir = SystemUtil.getUserInfo().getCurrentDir();
+//                String className = StrUtil.removeSuffix(t.getStr("name"), ".btl");
+//                if ("Entity.java.btl".equalsIgnoreCase(t.getStr("name"))) {
+//                    className = ".java";
+//                }
+//                String outDir =
+//                        userDir + StrUtil.nullToEmpty(moduleName)
+//                                + File.separator + "src" + File.separator + "main" + File.separator + "java"
+//                                + File.separator + StrUtil.nullToEmpty(packageName).replace(".", "/")
+//                                + File.separator + t.getStr("path")
+//                                + File.separator + tableDto.getTableNameCamelCaseFirstUpper()
+//                                + className;
+//                FileUtil.writeUtf8String(templateBackend.render(), outDir);
+//            });
+//
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+    }
 
+    /**
+     * btl里的参数映射
+     *
+     * @param packageName  包名称
+     * @param tableDto     表名称
+     * @param fieldDtoList 字段列表
+     * @return
+     */
     public static Map<String, Object> initBinding(String packageName, TableDto tableDto, List<FieldDto> fieldDtoList) {
         Map<String, Object> map = new HashMap<>();
         Set<String> importPackages = new HashSet<>();
