@@ -1,5 +1,5 @@
 export interface ${classNameCamelCase}Dto {
     <% for(var i = 0; i < configList.~size; i++) { %>
-    ${configList[i].fieldNameCamelCase}: ${configList[i].fieldJavaType};  //${configList[i].fieldComment}
+    ${configList[i].fieldNameCamelCase}: ${configList[i].fieldTsType};  //${configList[i].fieldComment}
 	<% } %>
 }

@@ -8,6 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.hutool.system.SystemUtil;
+import com.diaoyn.generator.converts.JavaToTsConvert;
 import com.diaoyn.generator.dto.FieldDto;
 import com.diaoyn.generator.dto.TableDto;
 import org.beetl.core.Configuration;
@@ -51,7 +52,7 @@ public class CodeGenerator {
             JSONUtil.createObj().set("name", "Api.ts.btl").set("path", "api"),
 //            JSONUtil.createObj().set("name", "Api.js.btl").set("path", "api"),
 //            JSONUtil.createObj().set("name", "form.vue.btl").set("path", "views"),
-            JSONUtil.createObj().set("name", "index.vue.btl").set("path", "views")
+            JSONUtil.createObj().set("name", "index1.vue.btl").set("path", "views")
     );
 
     private static final List<JSONObject> GEN_MOBILE_FILE_LIST = CollectionUtil.newArrayList(
@@ -134,13 +135,20 @@ public class CodeGenerator {
                 if ("Entity.java.btl".equalsIgnoreCase(t.getStr("name"))) {
                     className = ".java";
                 }
-                String outDir =
-                        userDir + StrUtil.nullToEmpty(moduleName)
-                                + File.separator + "src" + File.separator + "main" + File.separator + "java"
-                                + File.separator + StrUtil.nullToEmpty(packageName).replace(".", "/")
-                                + File.separator + t.getStr("path")
-                                + File.separator + tableDto.getTableNameCamelCaseFirstUpper()
-                                + className;
+                String outDir = userDir;
+                if (StrUtil.isNotBlank(moduleName)) {
+                    outDir = outDir + moduleName
+                            + File.separator + "src" + File.separator + "main" + File.separator + "java"
+                            + File.separator;
+                } else {
+                    outDir =
+                            outDir + ((ClasspathResourceLoader) groupTemplate.getResourceLoader()).getRoot() + File.separator;
+                }
+                outDir = outDir
+                        + File.separator + StrUtil.nullToEmpty(packageName).replace(".", "/")
+                        + File.separator + t.getStr("path")
+                        + File.separator + tableDto.getTableNameCamelCaseFirstUpper()
+                        + className;
                 FileUtil.writeUtf8String(templateBackend.render(), outDir);
             });
 
@@ -152,53 +160,30 @@ public class CodeGenerator {
     //生成前端代码
     public static void executeFrontend(String moduleName, String packageName, TableDto tableDto,
                                        List<FieldDto> fieldDtoList) {
-//        try {
-//            GroupTemplate groupTemplate = new GroupTemplate(new ClasspathResourceLoader("backend"),
-//                    Configuration.defaultConfiguration());
-//            Map<String, Object> bindMap = initBinding(packageName, tableDto, fieldDtoList);
-//            GEN_FRONT_FILE_LIST.forEach(fileJsonObject -> {
-//                String fileTemplateName = fileJsonObject.getStr("name");
-//                String fileTemplatePath = fileJsonObject.getStr("path") + File.separator + genBasic.getModuleName();
-//                GenBasicPreviewResult.GenBasicCodeResult genBasicCodeFrontResult =
-//                        new GenBasicPreviewResult.GenBasicCodeResult();
-//                Template templateFront = groupTemplateFront.getTemplate(fileTemplateName);
-//                templateFront.binding(bindingJsonObject);
-//                String resultName = StrUtil.removeSuffix(fileTemplateName, ".btl");
-//                if ("Api.js.btl".equalsIgnoreCase(fileTemplateName)) {
-//                    resultName = StrUtil.lowerFirst(genBasic.getClassName()) + resultName;
-//                    genBasicCodeFrontResult.setCodeFileName(resultName);
-//                    genBasicCodeFrontResult.setCodeFileWithPathName(genFrontBasicPath + fileTemplatePath + File
-//                    .separator + resultName);
-//                } else {
-//                    genBasicCodeFrontResult.setCodeFileName(resultName);
-//                    genBasicCodeFrontResult.setCodeFileWithPathName(genFrontBasicPath + fileTemplatePath + File
-//                    .separator + genBasic.getBusName() + File.separator + resultName);
-//                }
-//                genBasicCodeFrontResult.setCodeFileContent(templateFront.render());
-//                genBasicCodeFrontendResultList.add(genBasicCodeFrontResult);
-//            });
-//
-//            GEN_BACKEND_FILE_LIST.forEach(t -> {
-//                Template templateBackend = groupTemplate.getTemplate(t.getStr("name"));
-//                templateBackend.binding(bindMap);
-//                String userDir = SystemUtil.getUserInfo().getCurrentDir();
-//                String className = StrUtil.removeSuffix(t.getStr("name"), ".btl");
-//                if ("Entity.java.btl".equalsIgnoreCase(t.getStr("name"))) {
-//                    className = ".java";
-//                }
-//                String outDir =
-//                        userDir + StrUtil.nullToEmpty(moduleName)
-//                                + File.separator + "src" + File.separator + "main" + File.separator + "java"
-//                                + File.separator + StrUtil.nullToEmpty(packageName).replace(".", "/")
-//                                + File.separator + t.getStr("path")
-//                                + File.separator + tableDto.getTableNameCamelCaseFirstUpper()
-//                                + className;
-//                FileUtil.writeUtf8String(templateBackend.render(), outDir);
-//            });
-//
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            GroupTemplate groupTemplate = new GroupTemplate(new ClasspathResourceLoader("frontend"),
+                    Configuration.defaultConfiguration());
+            Map<String, Object> bindMap = initBinding(packageName, tableDto, fieldDtoList);
+            GEN_FRONT_FILE_LIST.forEach(t -> {
+                Template templateBackend = groupTemplate.getTemplate(t.getStr("name"));
+                templateBackend.binding(bindMap);
+                String userDir = SystemUtil.getUserInfo().getCurrentDir();
+                String className = StrUtil.removeSuffix(t.getStr("name"), ".btl");
+                String outDir =
+                        userDir + StrUtil.nullToEmpty(moduleName)
+                                + File.separator + ((ClasspathResourceLoader) groupTemplate.getResourceLoader()).getRoot()
+                                + File.separator + t.getStr("path")
+                                + File.separator + tableDto.getTableNameCamelCaseFirstUpper()
+                                + className;
+                FileUtil.writeUtf8String(templateBackend.render(), outDir);
+            });
+
+
+        } catch (
+                IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**
@@ -293,6 +278,7 @@ public class CodeGenerator {
             }
             // 实体类型
             configItem.set("fieldJavaType", fieldDto.getDbColumnType().getType());
+            configItem.set("fieldTsType", JavaToTsConvert.processConvert(fieldDto.getDbColumnType()));
             importPackages.add(fieldDto.getDbColumnType().getPkg());
             // 字段注释
             configItem.set("fieldComment", fieldDto.getFieldComment());
@@ -398,7 +384,7 @@ public class CodeGenerator {
                         "&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai",
                 "root",
                 "root",
-                "diaoyn-common-generator",
+                "ddd",
                 "com.diaoyn.example", "cs_daily");
     }
 }
