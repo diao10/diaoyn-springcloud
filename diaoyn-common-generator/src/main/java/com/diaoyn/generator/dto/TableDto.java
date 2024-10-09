@@ -34,6 +34,11 @@ public class TableDto {
     private String tableNameCamelCase;
 
     /**
+     * 业务名(就是去掉了前缀)
+     */
+    private String bizName;
+
+    /**
      * 表名称（首字母大写驼峰）
      */
     private String tableNameCamelCaseFirstUpper;

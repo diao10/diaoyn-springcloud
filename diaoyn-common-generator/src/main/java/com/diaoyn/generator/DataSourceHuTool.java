@@ -48,14 +48,17 @@ public class DataSourceHuTool {
      * 查看数据库表
      *
      * @param url        数据库连接url
-     * @param user       数据库用户名
+     * @param username   数据库用户名
      * @param password   数据库密码
      * @param tableNames 表名
-     * @return List<TableDto>
+     * @return List<TableDto> 数据表列表
      */
-    public static List<TableDto> getTable(String url, String user, String password, String... tableNames) {
+    public static List<TableDto> getTable(String url, String username, String password, String... tableNames) {
         try {
-            getBb(url, user, password);
+            if (StrUtil.isEmpty(url) || StrUtil.isEmpty(username) || StrUtil.isEmpty(password)) {
+                throw new RuntimeException("数据库连接信息不能为空");
+            }
+            getBb(url, username, password);
             GlobalDbConfig.setCaseInsensitive(true);
             IDbQuery query = getDbQuery(url);
             List<Entity> queryList = db.query(query.tablesSql(tableNames));
@@ -65,6 +68,8 @@ public class DataSourceHuTool {
                         .tableName(entity.getStr(query.tableName()))
                         .tableComment(entity.getStr(query.tableComment()))
                         .tableNameCamelCase(StrUtil.toCamelCase(entity.getStr(query.tableName())))
+                        .bizName(StrUtil.toCamelCase(StrUtil.subAfter(entity.getStr(query.tableName()),
+                                StrUtil.UNDERLINE, false)))
                         .tableNameCamelCaseFirstUpper(StrUtil.upperFirst(StrUtil.toCamelCase(entity.getStr(query.tableName()))))
                         .build();
                 resultList.add(dto);
@@ -80,14 +85,14 @@ public class DataSourceHuTool {
      * 根据表名获取字段信息
      *
      * @param url       数据库连接url
-     * @param user      数据库用户名
+     * @param username  数据库用户名
      * @param password  数据库密码
      * @param tableName 表名
-     * @return
+     * @return 数据库字段列表
      */
-    public static List<FieldDto> getField(String url, String user, String password, String tableName) {
+    public static List<FieldDto> getField(String url, String username, String password, String tableName) {
         try {
-            getBb(url, user, password);
+            getBb(url, username, password);
             GlobalDbConfig.setCaseInsensitive(true);
             IDbQuery query = getDbQuery(url);
             ITypeConvert convert = getConvert(url);

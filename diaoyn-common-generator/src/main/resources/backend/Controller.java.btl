@@ -39,7 +39,7 @@ import java.util.List;
 <% } %>
 @Validated
 @RestController
-@RequestMapping("/${classNameCamelCase}")
+@RequestMapping("/${bizName}")
 public class ${className}Controller {
 
     /**
@@ -68,7 +68,11 @@ public class ${className}Controller {
     public ResponseEntity<Page<${className}>> page(@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                                       @RequestParam(name = "pageSize", defaultValue = "20") Integer pageSize) {
         LambdaQueryWrapper<${className}> queryWrapper = new LambdaQueryWrapper<>();
+        <% for(item in configList) { %>
+        <% if(item.isAutoInsert && item.fieldJavaType == 'Date') { %>
         queryWrapper.orderByDesc(${className}::getCreateTime);
+        <% } %>
+        <% } %>
         return ResponseEntity.ok(${classNameCamelCase}Service.page(new Page<>(pageNo, pageSize), queryWrapper));
     }
 

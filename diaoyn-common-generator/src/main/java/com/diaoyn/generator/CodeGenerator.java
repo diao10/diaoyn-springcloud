@@ -4,6 +4,7 @@ package com.diaoyn.generator;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -39,11 +40,15 @@ public class CodeGenerator {
     /**
      * 一些公用的字段
      */
-    private static final String CREATE_USER_KEY = "CREATE_USER";
-    private static final String CREATE_TIME_KEY = "CREATE_TIME";
-    private static final String UPDATE_USER_KEY = "UPDATE_USER";
-    private static final String UPDATE_TIME_KEY = "UPDATE_TIME";
-    private static final String DELETE_FLAG_KEY = "DEL_FLAG";
+    private static String CREATE_USER_KEY = "CREATE_USER";
+    private static String CREATE_TIME_KEY = "CREATE_TIME";
+    private static String UPDATE_USER_KEY = "UPDATE_USER";
+    private static String UPDATE_TIME_KEY = "UPDATE_TIME";
+    private static String DELETE_FLAG_KEY = "DEL_FLAG";
+
+    private String url;
+    private String username;
+    private String password;
 
     private static final List<JSONObject> GEN_SQL_FILE_LIST = CollectionUtil.newArrayList(
             JSONUtil.createObj().set("name", "Mysql.sql.btl"),
@@ -82,34 +87,90 @@ public class CodeGenerator {
     /**
      * 开启 swagger 模式
      */
-    public static void enableSwagger() {
+    public CodeGenerator enableSwagger() {
         swagger = true;
+        return this;
     }
 
     /**
      * 开启 springdoc 模式
      */
-    public static void enableSpringdoc() {
+    public CodeGenerator enableSpringdoc() {
         springdoc = true;
+        return this;
+    }
+
+
+    /**
+     * 修改 CREATE_USER_KEY
+     */
+    public CodeGenerator setCreateUserKey(String key) {
+        CREATE_USER_KEY = key;
+        return this;
     }
 
     /**
-     * @param url         数据库地址
-     * @param user        数据库账号
-     * @param password    数据库密码
+     * 修改 CREATE_TIME_KEY
+     */
+    public CodeGenerator setCreateTimeKey(String key) {
+        CREATE_TIME_KEY = key;
+        return this;
+    }
+
+    /**
+     * 修改 UPDATE_USER_KEY
+     */
+    public CodeGenerator setUpdateUserKey(String key) {
+        UPDATE_USER_KEY = key;
+        return this;
+    }
+
+    /**
+     * 修改 UPDATE_TIME_KEY
+     */
+    public CodeGenerator setUpdateTimeKey(String key) {
+        UPDATE_TIME_KEY = key;
+        return this;
+    }
+
+    /**
+     * 修改 DELETE_FLAG_KEY
+     */
+    public CodeGenerator setDeleteFlagKey(String key) {
+        DELETE_FLAG_KEY = key;
+        return this;
+    }
+
+    public CodeGenerator setDb(String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        return this;
+    }
+
+
+    /**
+     * 执行生成文件
+     *
      * @param moduleName  模块名称
      * @param packageName 包名称
      * @param tableNames  表名称集合
      */
-    public static void execute(String url, String user, String password, String moduleName, String packageName,
-                               String... tableNames) {
+    public void execute(String moduleName, String packageName,
+                        String... tableNames) {
         System.out.println("==========================准备生成文件...==========================");
 
-        List<TableDto> tableDtoList = DataSourceHuTool.getTable(url, user, password, tableNames);
-        for (TableDto tableDto : tableDtoList) {
-            List<FieldDto> fieldDtoList = DataSourceHuTool.getField(url, user, password, tableDto.getTableName());
-            executeBackend(moduleName, packageName, tableDto, fieldDtoList);
-            executeFrontend(moduleName, packageName, tableDto, fieldDtoList);
+        List<TableDto> tableDtoList = DataSourceHuTool.getTable(url, username, password, tableNames);
+        for (int i = 0; i < tableDtoList.size(); i++) {
+            System.out.println("==========================" +
+                    NumberUtil.formatPercent((double) (i + 1) / tableDtoList.size(), 0) +
+                    "==========================");
+            List<FieldDto> fieldDtoList = DataSourceHuTool.getField(url, username, password,
+                    tableDtoList.get(i).getTableName());
+
+            Map<String, Object> bindMap = initBinding(packageName, tableDtoList.get(i), fieldDtoList);
+            executeBackend(moduleName, packageName, tableDtoList.get(i), bindMap);
+            executeFrontend(moduleName, tableDtoList.get(i), bindMap);
         }
         System.out.println("==========================文件生成完成！！！==========================");
     }
@@ -117,17 +178,16 @@ public class CodeGenerator {
     /**
      * 生成后端代码
      *
-     * @param moduleName   模块名称
-     * @param packageName  包名称
-     * @param tableDto     表名称
-     * @param fieldDtoList 字段列表
+     * @param moduleName  模块名称
+     * @param packageName 包名称
+     * @param tableDto    表名称
+     * @param bindMap     btl里的参数映射
      */
     public static void executeBackend(String moduleName, String packageName, TableDto tableDto,
-                                      List<FieldDto> fieldDtoList) {
+                                      Map<String, Object> bindMap) {
         try {
             GroupTemplate groupTemplate = new GroupTemplate(new ClasspathResourceLoader("backend"),
                     Configuration.defaultConfiguration());
-            Map<String, Object> bindMap = initBinding(packageName, tableDto, fieldDtoList);
             GEN_BACKEND_FILE_LIST.forEach(t -> {
                 Template templateBackend = groupTemplate.getTemplate(t.getStr("name"));
                 templateBackend.binding(bindMap);
@@ -158,13 +218,18 @@ public class CodeGenerator {
         }
     }
 
-    //生成前端代码
-    public static void executeFrontend(String moduleName, String packageName, TableDto tableDto,
-                                       List<FieldDto> fieldDtoList) {
+    /**
+     * 生成前端代码
+     *
+     * @param moduleName 模块名称
+     * @param tableDto   表名称
+     * @param bindMap    btl里的参数映射
+     */
+    public static void executeFrontend(String moduleName, TableDto tableDto,
+                                       Map<String, Object> bindMap) {
         try {
             GroupTemplate groupTemplate = new GroupTemplate(new ClasspathResourceLoader("frontend"),
                     Configuration.defaultConfiguration());
-            Map<String, Object> bindMap = initBinding(packageName, tableDto, fieldDtoList);
             GEN_FRONT_FILE_LIST.forEach(t -> {
                 Template templateBackend = groupTemplate.getTemplate(t.getStr("name"));
                 templateBackend.binding(bindMap);
@@ -174,7 +239,7 @@ public class CodeGenerator {
                         userDir + StrUtil.nullToEmpty(moduleName)
                                 + File.separator + ((ClasspathResourceLoader) groupTemplate.getResourceLoader()).getRoot()
                                 + File.separator + t.getStr("path")
-                                + File.separator + tableDto.getTableNameCamelCase()
+                                + File.separator + tableDto.getBizName()
                                 + className;
                 FileUtil.writeUtf8String(templateBackend.render(), outDir);
             });
@@ -265,6 +330,8 @@ public class CodeGenerator {
         map.put("className", tableDto.getTableNameCamelCaseFirstUpper());
         // 表名驼峰
         map.put("classNameCamelCase", tableDto.getTableNameCamelCase());
+        // 业务名(就是去掉了前缀)
+        map.put("bizName", tableDto.getBizName());
         // 定义配置详情列表
         List<JSONObject> configList = CollectionUtil.newArrayList();
         fieldDtoList.forEach(fieldDto -> {
@@ -286,18 +353,25 @@ public class CodeGenerator {
             importPackages.add(fieldDto.getDbColumnType().getPkg());
             // 字段注释
             configItem.set("fieldComment", fieldDto.getFieldComment());
-            // 是否需要逻辑删除
-            configItem.set("isLogicDelete", DELETE_FLAG_KEY.equalsIgnoreCase(fieldDto.getFieldName()));
+            // 是否需要逻辑删除,StrUtil.toUnderlineCase兼容输入的是驼峰
+            configItem.set("isLogicDelete", DELETE_FLAG_KEY.equalsIgnoreCase(fieldDto.getFieldName())
+                    || StrUtil.toUnderlineCase(DELETE_FLAG_KEY).equalsIgnoreCase(fieldDto.getFieldName()));
             if (configItem.getBool("isLogicDelete")) {
                 importPackages.add("com.baomidou.mybatisplus.annotation.TableLogic");
                 importPackages.add("com.fasterxml.jackson.annotation.JsonIgnore");
             }
-            // 是否需要自动插入
+            // 是否需要自动插入, StrUtil.toUnderlineCase兼容输入的是驼峰
             configItem.set("isAutoInsert",
-                    CREATE_USER_KEY.equalsIgnoreCase(fieldDto.getFieldName()) || CREATE_TIME_KEY.equalsIgnoreCase(fieldDto.getFieldName()));
+                    CREATE_USER_KEY.equalsIgnoreCase(fieldDto.getFieldName())
+                            || StrUtil.toUnderlineCase(CREATE_USER_KEY).equalsIgnoreCase(fieldDto.getFieldName())
+                            || CREATE_TIME_KEY.equalsIgnoreCase(fieldDto.getFieldName())
+                            || StrUtil.toUnderlineCase(CREATE_TIME_KEY).equalsIgnoreCase(fieldDto.getFieldName()));
             // 是否需要自动更新
             configItem.set("isAutoUpdate",
-                    UPDATE_USER_KEY.equalsIgnoreCase(fieldDto.getFieldName()) || UPDATE_TIME_KEY.equalsIgnoreCase(fieldDto.getFieldName()));
+                    UPDATE_USER_KEY.equalsIgnoreCase(fieldDto.getFieldName())
+                            || StrUtil.toUnderlineCase(UPDATE_USER_KEY).equalsIgnoreCase(fieldDto.getFieldName())
+                            || UPDATE_TIME_KEY.equalsIgnoreCase(fieldDto.getFieldName())
+                            || StrUtil.toUnderlineCase(UPDATE_TIME_KEY).equalsIgnoreCase(fieldDto.getFieldName()));
             configList.add(configItem);
         });
         // 配置信息
@@ -384,12 +458,17 @@ public class CodeGenerator {
 
     public static void main(String[] args) {
         //开启swagger2
-        CodeGenerator.enableSwagger();
-        CodeGenerator.execute("jdbc:mysql://192.168.0.200:3306/test-system?characterEncoding=UTF-8&useUnicode=true" +
-                        "&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai",
-                "root",
-                "root",
-                "diaoyn-common-generator",
-                "com.diaoyn.example", "cs_daily");
+        new CodeGenerator()
+                .enableSwagger()
+                .setCreateUserKey("createBy")
+                .setDb("jdbc:mysql://192.168.0.200:3306/test-system?characterEncoding=UTF-8&useUnicode=true" +
+                                "&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia" +
+                                "/Shanghai",
+                        "root",
+                        "root")
+                .execute(
+                        "diaoyn-common-generator",
+                        "com.diaoyn.example"
+                );
     }
 }
