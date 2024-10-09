@@ -5,6 +5,8 @@ import com.diaoyn.generator.enums.DbColumnType;
 import static com.diaoyn.generator.enums.DbColumnType.*;
 
 /**
+ * java类型转ts类型
+ *
  * @author diaoyn
  * @ClassName JavaToTsConvert
  * @Date 2024/10/8 18:04

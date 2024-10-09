@@ -11,6 +11,7 @@ import cn.hutool.system.SystemUtil;
 import com.diaoyn.generator.converts.JavaToTsConvert;
 import com.diaoyn.generator.dto.FieldDto;
 import com.diaoyn.generator.dto.TableDto;
+import com.diaoyn.generator.enums.DbColumnType;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
@@ -173,7 +174,7 @@ public class CodeGenerator {
                         userDir + StrUtil.nullToEmpty(moduleName)
                                 + File.separator + ((ClasspathResourceLoader) groupTemplate.getResourceLoader()).getRoot()
                                 + File.separator + t.getStr("path")
-                                + File.separator + tableDto.getTableNameCamelCaseFirstUpper()
+                                + File.separator + tableDto.getTableNameCamelCase()
                                 + className;
                 FileUtil.writeUtf8String(templateBackend.render(), outDir);
             });
@@ -278,6 +279,9 @@ public class CodeGenerator {
             }
             // 实体类型
             configItem.set("fieldJavaType", fieldDto.getDbColumnType().getType());
+            if (fieldDto.getDbColumnType() == DbColumnType.DATE) {
+                importPackages.add("com.fasterxml.jackson.annotation.JsonFormat");
+            }
             configItem.set("fieldTsType", JavaToTsConvert.processConvert(fieldDto.getDbColumnType()));
             importPackages.add(fieldDto.getDbColumnType().getPkg());
             // 字段注释
@@ -379,6 +383,7 @@ public class CodeGenerator {
 
 
     public static void main(String[] args) {
+        //开启swagger2
         CodeGenerator.enableSwagger();
         CodeGenerator.execute("jdbc:mysql://192.168.0.200:3306/test-system?characterEncoding=UTF-8&useUnicode=true" +
                         "&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai",
