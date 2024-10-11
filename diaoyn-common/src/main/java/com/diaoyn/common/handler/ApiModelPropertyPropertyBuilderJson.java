@@ -17,6 +17,7 @@ import static springfox.documentation.schema.Annotations.findPropertyAnnotation;
 
 /**
  * swagger2如何让页面的展示字段按照@JSONField配置的属性来展示
+ * 多看看ApiModelPropertyPropertyBuilder，它的@Order很低，所以有些方法可能会被默认改掉
  *
  * @author diaoyn
  * @ClassName ApiModelPropertyPropertyBuilderJson
@@ -36,12 +37,10 @@ public class ApiModelPropertyPropertyBuilderJson extends ApiModelPropertyPropert
         Optional<ApiModelProperty> apiModelProperty = empty();
         Optional<JSONField> jsonField = empty();
         if (context.getBeanPropertyDefinition().isPresent()) {
-            apiModelProperty = apiModelProperty.map(Optional::of).orElse(findPropertyAnnotation(
-                    context.getBeanPropertyDefinition().get(),
-                    ApiModelProperty.class));
-            jsonField = jsonField.map(Optional::of).orElse(findPropertyAnnotation(
-                    context.getBeanPropertyDefinition().get(),
-                    JSONField.class));
+            apiModelProperty =
+                    apiModelProperty.map(Optional::of).orElse(findPropertyAnnotation(context.getBeanPropertyDefinition().get(), ApiModelProperty.class));
+            jsonField =
+                    jsonField.map(Optional::of).orElse(findPropertyAnnotation(context.getBeanPropertyDefinition().get(), JSONField.class));
         }
         Optional<ApiModelProperty> finalApi = apiModelProperty;
         Optional<JSONField> finalJson = jsonField;
