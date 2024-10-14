@@ -58,7 +58,7 @@ public class CodeGenerator {
             JSONUtil.createObj().set("name", "Api.ts.btl").set("path", "api"),
 //            JSONUtil.createObj().set("name", "Api.js.btl").set("path", "api"),
 //            JSONUtil.createObj().set("name", "form.vue.btl").set("path", "views"),
-            JSONUtil.createObj().set("name", "index1.vue.btl").set("path", "views")
+            JSONUtil.createObj().set("name", "index.vue.btl").set("path", "views")
     );
 
     private static final List<JSONObject> GEN_MOBILE_FILE_LIST = CollectionUtil.newArrayList(
@@ -468,7 +468,8 @@ public class CodeGenerator {
                         "root")
                 .execute(
                         "diaoyn-common-generator",
-                        "com.diaoyn.example"
+                        "com.diaoyn.example",
+                        "cs_project"
                 );
     }
 }

@@ -1,263 +1,150 @@
 <template>
-	<%
-	var searchCount = 0;
-	var row = 0;
-	%>
-	<% for(var i = 0; i < configList.~size; i++) { %>
-		<% if(!configList[i].isKeyId && configList[i].needPage) { searchCount ++; }%>
-	<% } %>
-	<a-card :bordered="false">
-		<% if (searchCount > 0) { %>
-		<a-form ref="searchFormRef" name="advanced_search" :model="searchFormState" class="ant-advanced-search-form">
-			<a-row :gutter="24">
-				<% for(var i = 0; i < configList.~size; i++) { %>
-				<% if(!configList[i].isKeyId && configList[i].needPage) { row ++; %>
-				<% if(row <= 3) { %>
-				<a-col :span="6">
-				<% if(configList[i].effectType == 'input' || configList[i].effectType == 'textarea') { %>
-					<a-form-item label="${configList[i].fieldRemark}" name="${configList[i].fieldNameCamelCase}">
-						<a-input v-model:value="searchFormState.${configList[i].fieldNameCamelCase}" placeholder="请输入${configList[i].fieldRemark}" />
-					</a-form-item>
-				<% } else if (configList[i].effectType == 'select' || configList[i].effectType == 'radio' || configList[i].effectType == 'checkbox') {%>
-					<a-form-item label="${configList[i].fieldRemark}" name="${configList[i].fieldNameCamelCase}">
-						<a-select v-model:value="searchFormState.${configList[i].fieldNameCamelCase}" placeholder="请选择${configList[i].fieldRemark}" :options="${configList[i].fieldNameCamelCase}Options" />
-					</a-form-item>
-				<% } else if (configList[i].effectType == 'inputNumber' || configList[i].effectType == 'slider') {%>
-					<a-form-item label="${configList[i].fieldRemark}" name="${configList[i].fieldNameCamelCase}">
-						<a-input-number v-model:value="searchFormState.${configList[i].fieldNameCamelCase}" placeholder="请输入${configList[i].fieldRemark}" style="width: 100%" />
-					</a-form-item>
-				<% } else if (configList[i].effectType == 'datepicker') {%>
-					<a-form-item label="${configList[i].fieldRemark}" name="${configList[i].fieldNameCamelCase}">
-						<a-range-picker v-model:value="searchFormState.${configList[i].fieldNameCamelCase}" value-format="YYYY-MM-DD HH:mm:ss" show-time />
-					</a-form-item>
-				<% } else {%>
-					<a-form-item label="${configList[i].fieldRemark}" name="${configList[i].fieldNameCamelCase}">
-						<a-input v-model:value="searchFormState.${configList[i].fieldNameCamelCase}" placeholder="请输入${configList[i].fieldRemark}" />
-					</a-form-item>
-				<% } %>
-				</a-col>
-				<% } else { %>
-				<a-col :span="6" v-show="advanced">
-				<% if(configList[i].effectType == 'input' || configList[i].effectType == 'textarea') { %>
-					<a-form-item label="${configList[i].fieldRemark}" name="${configList[i].fieldNameCamelCase}">
-						<a-input v-model:value="searchFormState.${configList[i].fieldNameCamelCase}" placeholder="请输入${configList[i].fieldRemark}" />
-					</a-form-item>
-				<% } else if (configList[i].effectType == 'select' || configList[i].effectType == 'radio' || configList[i].effectType == 'checkbox') {%>
-					<a-form-item label="${configList[i].fieldRemark}" name="${configList[i].fieldNameCamelCase}">
-						<a-select v-model:value="searchFormState.${configList[i].fieldNameCamelCase}" placeholder="请选择${configList[i].fieldRemark}" :options="${configList[i].fieldNameCamelCase}Options" />
-					</a-form-item>
-				<% } else if (configList[i].effectType == 'inputNumber' || configList[i].effectType == 'slider') {%>
-					<a-form-item label="${configList[i].fieldRemark}" name="${configList[i].fieldNameCamelCase}">
-						<a-input-number v-model:value="searchFormState.${configList[i].fieldNameCamelCase}" placeholder="请输入${configList[i].fieldRemark}" style="width: 100%" />
-					</a-form-item>
-				<% } else if (configList[i].effectType == 'datepicker') {%>
-					<a-form-item label="${configList[i].fieldRemark}" name="${configList[i].fieldNameCamelCase}">
-						<a-range-picker v-model:value="searchFormState.${configList[i].fieldNameCamelCase}" show-time />
-					</a-form-item>
-				<% } else {%>
-					<a-form-item label="${configList[i].fieldRemark}" name="${configList[i].fieldNameCamelCase}">
-						<a-input v-model:value="searchFormState.${configList[i].fieldNameCamelCase}" placeholder="请输入${configList[i].fieldRemark}" />
-					</a-form-item>
-				<% } %>
-				</a-col>
-				<% } %>
-				<% } %>
-				<% } %>
-				<a-col :span="6">
-					<a-button type="primary" @click="tableRef.refresh()">查询</a-button>
-					<a-button style="margin: 0 8px" @click="reset">重置</a-button>
-					<% if(searchCount > 3) { %>
-					<a @click="toggleAdvanced" style="margin-left: 8px">
-						{{ advanced ? '收起' : '展开' }}
-						<component :is="advanced ? 'up-outlined' : 'down-outlined'"/>
-					</a>
-					<% }%>
-				</a-col>
-			</a-row>
-		</a-form>
-		<% } %>
-		<s-table
-			ref="tableRef"
-			:columns="columns"
-			:data="loadData"
-			:alert="options.alert.show"
-			bordered
-			<% for(var i = 0; i < configList.~size; i++) { %>
-			<% if(configList[i].isKeyId) { %>
-			:row-key="(record) => record.${configList[i].fieldNameCamelCase}"
-			<% } %>
-			<% } %>
-			:tool-config="toolConfig"
-			:row-selection="options.rowSelection"
-		>
-			<template #operator class="table-operator">
-				<a-space>
-					<a-button type="primary" @click="formRef.onOpen()" v-if="hasPerm('${classNameFirstLower}Add')">
-						<template #icon><plus-outlined /></template>
-						新增
-					</a-button>
-					<xn-batch-delete
-						v-if="hasPerm('${classNameFirstLower}BatchDelete')"
-						:selectedRowKeys="selectedRowKeys"
-						@batchDelete="deleteBatch${className}"
-					/>
-				</a-space>
-			</template>
-			<template #bodyCell="{ column, record }">
-				<% for(var i = 0; i < configList.~size; i++) { %>
-				<% if(!configList[i].isKeyId && configList[i].whetherTable) { %>
-				<% if (configList[i].effectType == 'select' || configList[i].effectType == 'radio') { %>
-				<template v-if="column.dataIndex === '${configList[i].fieldNameCamelCase}'">
-					{{ $TOOL.dictTypeData('${configList[i].dictTypeCode}', record.${configList[i].fieldNameCamelCase}) }}
-				</template>
-				<% } else if (configList[i].effectType == 'checkbox') { %>
-				<template v-if="column.dataIndex === '${configList[i].fieldNameCamelCase}'">
-					<a-tag v-for="textValue in JSON.parse(record.${configList[i].fieldNameCamelCase})" :key="textValue" color="green">{{ $TOOL.dictTypeData('${configList[i].dictTypeCode}', textValue) }}</a-tag>
-				</template>
-				<% } %>
-				<% } %>
-				<% } %>
-				<template v-if="column.dataIndex === 'action'">
-					<a-space>
-						<a @click="formRef.onOpen(record)" v-if="hasPerm('${classNameFirstLower}Edit')">编辑</a>
-						<a-divider type="vertical" v-if="hasPerm(['${classNameFirstLower}Edit', '${classNameFirstLower}Delete'], 'and')" />
-						<a-popconfirm title="确定要删除吗？" @confirm="delete${className}(record)">
-							<a-button type="link" danger size="small" v-if="hasPerm('${classNameFirstLower}Delete')">删除</a-button>
-						</a-popconfirm>
-					</a-space>
-				</template>
-			</template>
-		</s-table>
-	</a-card>
-	<Form ref="formRef" @successful="tableRef.refresh()" />
+  <div>
+    <el-button type="primary" @click="addDialog">添加${tableComment}</el-button>
+    <pure-table
+      locale="zhCn"
+      :data="dataList"
+      :columns="columns"
+      :pagination="pagination"
+    >
+      <template #operation="{ row }">
+        <el-button link type="primary" size="small" @click="jump(row)"
+          >查看</el-button
+        >
+
+        <el-button link type="primary" size="small" @click="deleteClick(row)">
+          删除
+        </el-button>
+      </template>
+    </pure-table>
+
+    <el-dialog v-model="dialogForm" title="添加${tableComment}" width="800">
+      <el-form :model="form">
+        <% for(var i = 0; i < configList.~size; i++) { %>
+        <% if(!configList[i].isLogicDelete && !configList[i].isAutoInsert && !configList[i].isAutoUpdate) { %>
+        <el-form-item label="${configList[i].fieldComment}" :label-width="formLabelWidth">
+          <el-input
+            v-model="form.${configList[i].fieldNameCamelCase}"
+            autocomplete="off"
+            placeholder="请输入${configList[i].fieldComment}"
+          />
+        </el-form-item>
+        <% } %>
+      	<% } %>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogForm = false">取消</el-button>
+          <el-button type="primary" @click="submit"> 确定 </el-button>
+        </div>
+      </template>
+    </el-dialog>
+  </div>
 </template>
 
-<script setup name="${busName}">
-	<%
-	var iptTool = 0;
-	if (searchCount > 0) {
-		for(var i = 0; i < configList.~size; i++) {
-			if(!configList[i].isKeyId) {
-			if(configList[i].effectType == 'select' || configList[i].effectType == 'radio' || configList[i].effectType == 'checkbox') {
-				iptTool++;
-			}
-			}
-		}
-	}
-	%>
-	<% if(iptTool > 0) { %>
-	import tool from '@/utils/tool'
-	<% } %>
-	import { cloneDeep } from 'lodash-es'
-	import Form from './form.vue'
-	import ${classNameFirstLower}Api from '@/api/${moduleName}/${classNameFirstLower}Api'
-	<% if (searchCount > 0) { %>
-	const searchFormState = ref({})
-	const searchFormRef = ref()
-	<% } %>
-	const tableRef = ref()
-	const formRef = ref()
-	const toolConfig = { refresh: true, height: true, columnSetting: true, striped: false }
-	<% if(searchCount > 3) { %>
-	// 查询区域显示更多控制
-	const advanced = ref(false)
-	const toggleAdvanced = () => {
-		advanced.value = !advanced.value
-	}
-	<% } %>
-	const columns = [
-	<% for(var i = 0; i < configList.~size; i++) { %>
-	<% if(!configList[i].isKeyId && configList[i].whetherTable) { %>
-		{
-			title: '${configList[i].fieldRemark}',
-			dataIndex: '${configList[i].fieldNameCamelCase}'<% if(configList[i].whetherRetract) { %>,<% } %>
-			<% if(configList[i].whetherRetract) { %>
-			ellipsis: true
-			<% } %>
-		},
-	<% } %>
-	<% } %>
-	]
-	// 操作栏通过权限判断是否显示
-	if (hasPerm(['${classNameFirstLower}Edit', '${classNameFirstLower}Delete'])) {
-		columns.push({
-			title: '操作',
-			dataIndex: 'action',
-			align: 'center',
-			width: 150
-		})
-	}
-	const selectedRowKeys = ref([])
-	// 列表选择配置
-	const options = {
-		// columns数字类型字段加入 needTotal: true 可以勾选自动算账
-		alert: {
-			show: true,
-			clear: () => {
-				selectedRowKeys.value = ref([])
-			}
-		},
-		rowSelection: {
-			onChange: (selectedRowKey, selectedRows) => {
-				selectedRowKeys.value = selectedRowKey
-			}
-		}
-	}
-	const loadData = (parameter) => {
-		<% if (searchCount > 0) { %>
-		const searchFormParam = cloneDeep(searchFormState.value)
-		<% for(var i = 0; i < configList.~size; i++) { %>
-		<% if(!configList[i].isKeyId && configList[i].needPage) { %>
-		<% if (configList[i].effectType == 'datepicker') {%>
-		// ${configList[i].fieldNameCamelCase}范围查询条件重载
-		if (searchFormParam.${configList[i].fieldNameCamelCase}) {
-			searchFormParam.start${configList[i].fieldNameCamelCaseFirstUpper} = searchFormParam.${configList[i].fieldNameCamelCase}[0]
-			searchFormParam.end${configList[i].fieldNameCamelCaseFirstUpper} = searchFormParam.${configList[i].fieldNameCamelCase}[1]
-			delete searchFormParam.${configList[i].fieldNameCamelCase}
-		}
-		<% } %>
-		<% } %>
-		<% } %>
-		return ${classNameFirstLower}Api.${classNameFirstLower}Page(Object.assign(parameter, searchFormParam)).then((data) => {
-		<% } else { %>
-		return ${classNameFirstLower}Api.${classNameFirstLower}Page(parameter).then((data) => {
-		<% } %>
-			return data
-		})
-	}
-	// 重置
-	const reset = () => {
-		searchFormRef.value.resetFields()
-		tableRef.value.refresh(true)
-	}
-	// 删除
-	const delete${className} = (record) => {
-		let params = [
-			{
-				<% for(var i = 0; i < configList.~size; i++) { %>
-				<% if(configList[i].isKeyId) { %>
-				${configList[i].fieldNameCamelCase}: record.${configList[i].fieldNameCamelCase}
-				<% } %>
-				<% } %>
-			}
-		]
-		${classNameFirstLower}Api.${classNameFirstLower}Delete(params).then(() => {
-			tableRef.value.refresh(true)
-		})
-	}
-	// 批量删除
-	const deleteBatch${className} = (params) => {
-		${classNameFirstLower}Api.${classNameFirstLower}Delete(params).then(() => {
-			tableRef.value.clearRefreshSelected()
-		})
-	}
-	<% if (searchCount > 0) { %>
-	<% for(var i = 0; i < configList.~size; i++) { %>
-	<% if(!configList[i].isKeyId && configList[i].needPage) { %>
-	<% if (configList[i].effectType == 'select' || configList[i].effectType == 'radio' || configList[i].effectType == 'checkbox') { %>
-	const ${configList[i].fieldNameCamelCase}Options = tool.dictList('${configList[i].dictTypeCode}')
-	<% } %>
-	<% } %>
-	<% } %>
-	<% } %>
+<script setup lang="ts">
+import { storageLocal } from "@pureadmin/utils";
+import {
+  addDialog,
+  closeDialog,
+  updateDialog,
+  closeAllDialog
+} from "@/components/ReDialog";
+import { PureTable } from "@pureadmin/table";
+import { ${classNameCamelCase}Page, ${classNameCamelCase}Add, ${classNameCamelCase}Update, ${classNameCamelCase}Delete } from "@/api/${bizName}Api";
+import { ElMessageBox } from "element-plus";
+defineOptions({
+  name: "${bizName}"
+});
+const dialogForm = ref(false);
+
+const formLabelWidth = "140px";
+
+const form = reactive({
+  projectNo: "", //项目编号
+  projectName: "", //项目名称
+  projectDesc:
+    "按产品需求文档、产品功能清单等输入物进行测试用例开发，并进行3轮测试实施", //项目简介
+  chargeUserId: "", //负责人id
+  partUserList: [], //参与人id列表
+  deviceList: [], //设备列表
+  projectDate: [], //项目日期
+  startDate: "", //项目开始日期
+  endDate: "" //项目结束日期
+});
+
+const pagination = reactive<any>({
+  pageSize: 10,
+  currentPage: 1,
+  pageSizes: [10, 15, 20],
+  total: 0,
+  align: "right",
+  background: true,
+  size: "default"
+});
+
+const showDialog = async () => {
+  dialogForm.value = true;
+};
+
+const submit = async () => {
+  const result = await ${classNameCamelCase}Add(form);
+  if (result) {
+    init(pagination.currentPage, pagination.pageSize);
+    dialogForm.value = false;
+  }
+};
+
+/** -------------- table --------------- */
+const dataList = ref<any>([]);
+const columns = ref<any>([
+   <% for(var i = 0; i < configList.~size; i++) { %>
+   <% if(!configList[i].isLogicDelete && !configList[i].isAutoInsert && !configList[i].isAutoUpdate) { %>
+  {
+    label: "${configList[i].fieldComment}",
+    prop: "${configList[i].fieldNameCamelCase}"
+  },
+   <% } %>
+   <% } %>
+  {
+    label: "操作",
+    fixed: "right",
+    slot: "operation"
+  }
+]);
+
+const deleteClick = async row => {
+  ElMessageBox.confirm("确定要删除所选数据吗？", "提示", {
+    type: "warning"
+  }).then(async () => {
+    const result = await ${classNameCamelCase}Delete(row.id);
+    if (result) {
+      init(pagination.currentPage, pagination.pageSize);
+    }
+  });
+};
+
+const jump = row => {
+  console.log(
+    "%crow===>>>: ",
+    "color: MidnightBlue; background: Aquamarine; font-size: 20px;",
+    row
+  );
+  router.push("/welcome/project/projectDetail/dbc");
+};
+
+const init = async (page: number, size: number) => {
+  const result = await ${classNameCamelCase}Page(page, size);
+  if (result) {
+    dataList.value = result.records;
+    pagination.total = result.total;
+  }
+};
+
+onMounted(() => {
+  init(1, 10);
+});
+
 </script>
+
+<style lang="scss" scoped></style>

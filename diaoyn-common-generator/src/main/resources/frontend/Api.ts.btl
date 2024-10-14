@@ -1,7 +1,110 @@
-export interface ${bizName}Dto {
+import { http } from "@/utils/http";
+import { getEnv } from "@/utils/getEnv";
+import type { Result } from "@/common/dtos/common.dto";
+
+interface ${className}PageRep {
+  countId: string;
+  current: number;
+  maxLimit: number;
+  optimizeCountSql: boolean;
+  orders: OrderItem[];
+  pages: number;
+  records: ${className}Rep[];
+  searchCount: boolean;
+  size: number;
+  total: number;
+}
+
+interface ${className}Rep {
     <% for(var i = 0; i < configList.~size; i++) { %>
     <% if(!configList[i].isLogicDelete && !configList[i].isAutoInsert && !configList[i].isAutoUpdate) { %>
     ${configList[i].fieldNameCamelCase}: ${configList[i].fieldTsType};  //${configList[i].fieldComment}
     <% } %>
 	<% } %>
 }
+
+// 分页查询所有${tableComment}
+export const ${classNameCamelCase}Page = async (pageNo: number, pageSize: number) => {
+  const rep = await http.request<Result<${className}PageRep>>(
+    "get",
+    getEnv("VITE_API_FRONT") +
+      `/${bizName}/page?pageNo=${pageNo}&pageSize=${pageSize}`
+  );
+  if (!rep.success) {
+    window.$BF.message(rep.message, { type: "error" });
+    return null;
+  }
+  return rep.result;
+};
+
+// 查询所有${tableComment}
+export const ${classNameCamelCase}List = async () => {
+  const rep = await http.request<Result<${className}Rep>>(
+    "get",
+    getEnv("VITE_API_FRONT") + `/${bizName}`
+  );
+  if (!rep.success) {
+    window.$BF.message(rep.message, { type: "error" });
+    return null;
+  }
+  return rep.result;
+};
+
+// 通过${tableComment}主键查询单条数据
+export const ${classNameCamelCase}Detail = async (id: string) => {
+  const rep = await http.request<Result<${className}Rep>>(
+    "get",
+    getEnv("VITE_API_FRONT") + `/${bizName}/{id}`
+  );
+  if (!rep.success) {
+    window.$BF.message(rep.message, { type: "error" });
+    return null;
+  }
+  return rep.result;
+};
+
+
+// 新增${tableComment}
+export const ${classNameCamelCase}Add = async (data: any) => {
+  const rep = await http.request<Result<any>>(
+    "post",
+    getEnv("VITE_API_FRONT") + "/${bizName}",
+    {
+      data
+    }
+  );
+  if (!rep.success) {
+    window.$BF.message(rep.message, { type: "error" });
+    return null;
+  }
+  return rep;
+};
+
+// 修改${tableComment}
+export const ${classNameCamelCase}Update = async (data: any) => {
+  const rep = await http.request<Result<any>>(
+    "put",
+    getEnv("VITE_API_FRONT") + "/${bizName}",
+    {
+      data
+    }
+  );
+  if (!rep.success) {
+    window.$BF.message(rep.message, { type: "error" });
+    return null;
+  }
+  return rep;
+};
+
+// 删除新增${tableComment}
+export const ${classNameCamelCase}Delete = async (ids: string) => {
+  const rep = await http.request<Result<any>>(
+    "delete",
+    getEnv("VITE_API_FRONT") + `/${bizName}?ids=${ids}`
+  );
+  if (!rep.success) {
+    window.$BF.message(rep.message, { type: "error" });
+    return null;
+  }
+  return rep.success;
+};
