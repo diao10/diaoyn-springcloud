@@ -28,7 +28,7 @@ export const ${classNameCamelCase}Page = async (pageNo: number, pageSize: number
   const rep = await http.request<Result<${className}PageRep>>(
     "get",
     getEnv("VITE_API_FRONT") +
-      `/${bizName}/page?pageNo=${pageNo}&pageSize=${pageSize}`
+      `/${bizName}/page?pageNo=\${pageNo}&pageSize=\${pageSize}`
   );
   if (!rep.success) {
     window.$BF.message(rep.message, { type: "error" });
@@ -54,7 +54,7 @@ export const ${classNameCamelCase}List = async () => {
 export const ${classNameCamelCase}Detail = async (id: string) => {
   const rep = await http.request<Result<${className}Rep>>(
     "get",
-    getEnv("VITE_API_FRONT") + `/${bizName}/{id}`
+    getEnv("VITE_API_FRONT") + `/${bizName}/\${id}`
   );
   if (!rep.success) {
     window.$BF.message(rep.message, { type: "error" });
@@ -96,11 +96,11 @@ export const ${classNameCamelCase}Update = async (data: any) => {
   return rep;
 };
 
-// 删除新增${tableComment}
+// 删除${tableComment}
 export const ${classNameCamelCase}Delete = async (ids: string) => {
   const rep = await http.request<Result<any>>(
     "delete",
-    getEnv("VITE_API_FRONT") + `/${bizName}?ids=${ids}`
+    getEnv("VITE_API_FRONT") + `/${bizName}?ids=\${ids}`
   );
   if (!rep.success) {
     window.$BF.message(rep.message, { type: "error" });
