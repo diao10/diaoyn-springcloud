@@ -38,6 +38,15 @@ public class CodeGenerator {
      */
     private static boolean springdoc = false;
     /**
+     * 开启后端代码生成
+     */
+    private boolean backendFlag = true;
+    /**
+     * 开启前端代码生成
+     */
+    private boolean frontendFlag = true;
+
+    /**
      * 一些公用的字段
      */
     private static String CREATE_USER_KEY = "CREATE_USER";
@@ -100,6 +109,15 @@ public class CodeGenerator {
         return this;
     }
 
+    public CodeGenerator backendFlag(boolean backendFlag) {
+        this.backendFlag = backendFlag;
+        return this;
+    }
+
+    public CodeGenerator frontendFlag(boolean frontendFlag) {
+        this.frontendFlag = frontendFlag;
+        return this;
+    }
 
     /**
      * 修改 CREATE_USER_KEY
@@ -169,8 +187,12 @@ public class CodeGenerator {
                     tableDtoList.get(i).getTableName());
 
             Map<String, Object> bindMap = initBinding(packageName, tableDtoList.get(i), fieldDtoList);
-            executeBackend(moduleName, packageName, tableDtoList.get(i), bindMap);
-            executeFrontend(moduleName, tableDtoList.get(i), bindMap);
+            if (backendFlag) {
+                executeBackend(moduleName, packageName, tableDtoList.get(i), bindMap);
+            }
+            if (frontendFlag) {
+                executeFrontend(moduleName, tableDtoList.get(i), bindMap);
+            }
         }
         System.out.println("==========================文件生成完成！！！==========================");
     }
@@ -460,6 +482,7 @@ public class CodeGenerator {
         //开启swagger2
         new CodeGenerator()
                 .enableSwagger()
+                .backendFlag(false)
                 .setCreateUserKey("createBy")
                 .setDb("jdbc:mysql://192.168.0.200:3306/test-system?characterEncoding=UTF-8&useUnicode=true" +
                                 "&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia" +
@@ -469,7 +492,7 @@ public class CodeGenerator {
                 .execute(
                         "diaoyn-common-generator",
                         "com.diaoyn.example",
-                        "cs_project"
+                        "cs_dbc"
                 );
     }
 }
