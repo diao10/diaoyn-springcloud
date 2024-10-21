@@ -16,22 +16,23 @@
 
 package com.diaoyn.alone.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author <a href="mailto:chenxilzx1@gmail.com">theonefx</a>
  */
 @Controller
+@Tag(name = "basic")
 public class BasicController {
 
     // http://127.0.0.1:8080/hello?name=lisi
     @RequestMapping("/hello")
     @ResponseBody
-    public String hello(@RequestParam(name = "name", defaultValue = "unknown user") String name) {
+    public String hello(@Parameter(description = "用戶名稱") @RequestParam(name = "name", defaultValue = "unknown user") String name) {
         return "Hello " + name;
     }
 
@@ -54,7 +55,7 @@ public class BasicController {
 
     // http://127.0.0.1:8080/html
     @RequestMapping("/html")
-    public String html(){
+    public String html() {
         return "index.html";
     }
 
@@ -64,4 +65,16 @@ public class BasicController {
         user.setName("zhangsan");
         user.setAge(18);
     }
+
+    /**
+     * 查询我的任务
+     *
+     * @return Result
+     */
+    @GetMapping("/myTask")
+    @Operation(summary = "查询我的任务")
+    public void myTask(@RequestHeader("userId") String userId) {
+        System.out.println("userId = " + userId);
+    }
+
 }
