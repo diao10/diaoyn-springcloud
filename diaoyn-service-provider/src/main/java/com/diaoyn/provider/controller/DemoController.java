@@ -9,6 +9,7 @@ import com.diaoyn.provider.service.DemoService;
 import com.diaoyn.provider.vo.rep.CommonRepVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -64,9 +65,9 @@ public class DemoController {
     /**
      * @see ApiModelPropertyPropertyBuilderJson
      */
-    @ApiOperation(value = "仅展示swagger的response", response = CommonRepVo.class)
+    @ApiOperation(value = "展示swagger的response,隐藏自己写的请求头", response = CommonRepVo.class)
     @GetMapping("/showResponse")
-    public ResponseVO<?> showResponse() {
+    public ResponseVO<?> showResponse(@ApiParam(hidden = true) @RequestHeader("userId") String userId) {
         return null;
     }
 
