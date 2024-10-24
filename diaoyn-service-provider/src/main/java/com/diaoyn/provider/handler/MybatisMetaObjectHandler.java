@@ -1,18 +1,21 @@
-package com.diaoyn.handle;
+package com.diaoyn.provider.handler;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.stereotype.Component;
 
 /**
+ * mybatis-plus自动填充
+ *
  * @author diaoyn
- * @ClassName CustomMetaObjectHandler
+ * @ClassName MybatisMetaObjectHandler
  * @Date 2024/9/6 13:24
  */
-// TODO: 2024/10/8 这个class是配合web使用的
-//@Component
-public class CustomMetaObjectHandler implements MetaObjectHandler {
+//
+@Component
+public class MybatisMetaObjectHandler implements MetaObjectHandler {
 
     /**
      * 删除标志
