@@ -4,7 +4,7 @@ import com.diaoyn.common.handler.ApiModelPropertyPropertyBuilderJson;
 import com.diaoyn.common.vo.DemoRepVO;
 import com.diaoyn.common.vo.DemoVO;
 import com.diaoyn.common.vo.ResponseVO;
-import com.diaoyn.provider.aspect.AutoLog;
+import com.diaoyn.provider.aspect.annotation.AutoLog;
 import com.diaoyn.provider.service.DemoService;
 import com.diaoyn.provider.vo.rep.CommonRepVo;
 import io.swagger.annotations.Api;
