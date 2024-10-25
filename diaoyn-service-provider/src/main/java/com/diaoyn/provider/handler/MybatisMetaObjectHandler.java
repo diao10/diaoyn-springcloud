@@ -2,12 +2,20 @@ package com.diaoyn.provider.handler;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
- * mybatis-plus自动填充
+ * mybatis-plus自动填充(需要实体类里填写@TableField(fill = FieldFill.INSERT))等等，才会调取该方法
+ * 该方法默认全部实体类
  *
  * @author diaoyn
  * @ClassName MybatisMetaObjectHandler
@@ -44,6 +52,8 @@ public class MybatisMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
+        //获取当前对象
+//        metaObject.getOriginalObject();
         //为空则设置deleteFlag
         Object deleteFlag = metaObject.getValue(DELETE_FLAG);
         if (ObjectUtil.isNull(deleteFlag)) {
@@ -69,20 +79,20 @@ public class MybatisMetaObjectHandler implements MetaObjectHandler {
         setFieldValByName(UPDATE_TIME, DateTime.now(), metaObject);
     }
 
+
     /**
      * 获取用户id
+     *
+     * @return String
      */
     private String getUserId() {
-        try {
-            String userId = null;
-            if (ObjectUtil.isNotEmpty(userId)) {
-                return userId;
-            } else {
-                return "-1";
-            }
-        } catch (Exception e) {
-            return "-1";
+        // 从请求中获取Token，这里假设Token在请求头中
+        HttpServletRequest request =
+                ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        String token = request.getHeader("token");
+        if (StrUtil.isNotEmpty(token)) {
+            return JWTUtil.parseToken(token).getPayload("userId").toString();
         }
-
+        return null;
     }
 }
