@@ -117,7 +117,16 @@ public class MybatisInterceptor implements Interceptor {
      * @param object object
      * @return Field[]
      */
-    public static Field[] getAllFields(Object object) {
-        return getFields(object);
+
+    private static Field[] getAllFields(Object object) {
+        Class<?> clazz = object.getClass();
+        List<Field> fieldList = new ArrayList<>();
+        while (clazz != null) {
+            fieldList.addAll(new ArrayList<>(Arrays.asList(clazz.getDeclaredFields())));
+            clazz = clazz.getSuperclass();
+        }
+        Field[] fields = new Field[fieldList.size()];
+        fieldList.toArray(fields);
+        return fields;
     }
 }

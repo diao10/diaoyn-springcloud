@@ -154,17 +154,8 @@ public class DictAspect {
      * @param object object
      * @return Field[]
      */
-    private static Field[] getAllFields(Object object) {
-        return getFields(object);
-    }
 
-    /**
-     * 获取类的所有属性，包括父类
-     *
-     * @param object object
-     * @return Field[]
-     */
-    public static Field[] getFields(Object object) {
+    private static Field[] getAllFields(Object object) {
         Class<?> clazz = object.getClass();
         List<Field> fieldList = new ArrayList<>();
         while (clazz != null) {
