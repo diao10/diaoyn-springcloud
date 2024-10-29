@@ -2,7 +2,7 @@ import { http } from "@/utils/http";
 import { getEnv } from "@/utils/getEnv";
 import type { Result } from "@/common/dtos/common.dto";
 
-interface ${className}PageRep {
+export interface ${className}PageRep {
   countId: string;
   current: number;
   maxLimit: number;
@@ -15,7 +15,7 @@ interface ${className}PageRep {
   total: number;
 }
 
-interface ${className}Rep {
+export interface ${className}Rep {
     <% for(var i = 0; i < configList.~size; i++) { %>
     <% if(!configList[i].isLogicDelete && !configList[i].isAutoInsert && !configList[i].isAutoUpdate) { %>
     ${configList[i].fieldNameCamelCase}: ${configList[i].fieldTsType};  //${configList[i].fieldComment}
