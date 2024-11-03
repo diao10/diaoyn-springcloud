@@ -4,7 +4,7 @@ import com.diaoyn.alone.interceptor.MyInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @ClassName InterceptorConfig
@@ -12,16 +12,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
  * @Date 2024/5/23 13:28
  */
 @Configuration
-public class InterceptorConfig extends WebMvcConfigurationSupport {
+public class InterceptorConfig implements WebMvcConfigurer {
 
     @Override
-    protected void addInterceptors(InterceptorRegistry registry) {
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new MyInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns("/swagger**/**", "/webjars/**", "/v2/**", "/swagger-ui.html", "/doc.html",
                         "/error")
                 .excludePathPatterns("**/login");
-        super.addInterceptors(registry);
     }
 
     @Override
@@ -34,7 +33,6 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
                 "classpath:/META-INF/resources/webjars/");
         registry.addResourceHandler("doc.html").addResourceLocations(
                 "classpath:/META-INF/resources/");
-        super.addResourceHandlers(registry);
     }
 
 }
