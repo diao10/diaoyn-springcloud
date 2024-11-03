@@ -5,8 +5,9 @@ import cn.hutool.cache.CacheUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.diaoyn.common.vo.ResponseVO;
 import com.diaoyn.provider.aspect.annotation.Dict;
@@ -73,10 +74,10 @@ public class DictAspect {
         }
         List<JSONObject> jsonList = new ArrayList<>();
         records.forEach(record -> {
-            JSONObject json = JSONUtil.parseObj(record);
+            JSONObject json = JSONObject.parseObject(JSON.toJSONString(record, SerializerFeature.WriteMapNullValue));
             dictEntityList.forEach(dictEntity ->
-                    json.set(dictEntity.getFieldName() + SUFFIX,
-                            getDictText(dictEntity, json.getStr(dictEntity.getFieldName()))));
+                    json.put(dictEntity.getFieldName() + SUFFIX,
+                            getDictText(dictEntity, json.getString(dictEntity.getFieldName()))));
             jsonList.add(json);
         });
 
