@@ -20,7 +20,6 @@
         <module>diaoyn-service-provider</module>
         <module>diaoyn-service-consumer</module>
         <module>diaoyn-service-plugin</module>
-        <module>diaoyn-service-alone</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

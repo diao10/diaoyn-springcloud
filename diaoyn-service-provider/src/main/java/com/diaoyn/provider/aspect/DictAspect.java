@@ -74,7 +74,8 @@ public class DictAspect {
         }
         List<JSONObject> jsonList = new ArrayList<>();
         records.forEach(record -> {
-            JSONObject json = JSONObject.parseObject(JSON.toJSONString(record, SerializerFeature.WriteMapNullValue));
+            JSONObject json = JSONObject.parseObject(JSON.toJSONString(record, SerializerFeature.WriteMapNullValue,
+                    SerializerFeature.WriteDateUseDateFormat));
             dictEntityList.forEach(dictEntity ->
                     json.put(dictEntity.getFieldName() + SUFFIX,
                             getDictText(dictEntity, json.getString(dictEntity.getFieldName()))));

@@ -5,9 +5,9 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.ds.ItemDataSource;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 /**
@@ -24,7 +24,7 @@ public class DynamicDataSourceHandler {
     private final static String MAIN = "main";
 
 
-    @Resource
+    @Autowired(required = false)
     DynamicRoutingDataSource dynamicRoutingDataSource;
 
     /**
