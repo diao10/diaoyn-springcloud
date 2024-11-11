@@ -3,7 +3,7 @@
 
     <property name="log.level" value="debug" />
     <property name="log.maxHistory" value="30" />
-    <property name="log.filePath" value="/home/srp/server/indicator/logs/" />
+    <property name="log.filePath" value="logs/" />
 <!--    <property name="log.pattern" value="%cn[%thread-%5p][%d{yyyy-MM-dd HH:mm:ss.S}]%m%n[%class:%L] \n"/>-->
     <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n"/>
 
