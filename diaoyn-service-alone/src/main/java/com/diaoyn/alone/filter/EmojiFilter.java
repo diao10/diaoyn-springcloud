@@ -43,6 +43,14 @@ public class EmojiFilter implements Filter {
             ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
+
+        String contentType = req.getContentType();
+        //其他类型的请求跳过
+        if (contentType == null || !contentType.startsWith("application/json")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         //post和put请求只能读一次stream 需要封装
         CustomHttpServletRequestWrapper emojiWrapper = new CustomHttpServletRequestWrapper(req);
         res.setCharacterEncoding("utf-8");
