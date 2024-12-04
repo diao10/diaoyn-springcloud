@@ -56,9 +56,11 @@ public class DemoController {
             try {
                 demoService.send(clientId);
             } catch (Exception e) {
+                emitter.completeWithError(e);
                 throw new RuntimeException("推送数据异常");
             }
         });
+        emitter.complete();
         return emitter;
     }
 
