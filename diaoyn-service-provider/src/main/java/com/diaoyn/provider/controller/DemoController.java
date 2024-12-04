@@ -51,8 +51,8 @@ public class DemoController {
     }
 
     @ApiOperation("连续获取服务器时间")
-    @GetMapping("/getTime")
-    public ResponseBodyEmitter getTime(String clientId) {
+    @GetMapping("/getTime/{clientId}")
+    public ResponseBodyEmitter getTime(@PathVariable String clientId) {
         ResponseBodyEmitter emitter = demoService.getConn(clientId);
         CompletableFuture.runAsync(() -> {
             try {
@@ -62,22 +62,22 @@ public class DemoController {
                 throw new RuntimeException("推送数据异常");
             }
         });
-        emitter.complete();
-        return emitter;
+         return emitter;
     }
 
     @ApiOperation("适合服务推送")
     @GetMapping("/sendTime")
     public SseEmitter sendTime() {
         SseEmitter emitter = new SseEmitter();
-        CompletableFuture.runAsync(() -> {
+        for (int i = 0; i < 20; i++) {
             try {
                 emitter.send(DateUtil.now());
             } catch (Exception e) {
                 emitter.completeWithError(e);
                 throw new RuntimeException("推送数据异常");
             }
-        });
+
+        }
         emitter.complete();
         return emitter;
     }

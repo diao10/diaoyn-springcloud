@@ -85,8 +85,9 @@ public class DemoServiceImpl implements DemoService {
         ResponseBodyEmitter emitter = SSE_CACHE.get(clientId);
         for (int i = 0; i < 20; i++) {
             emitter.send(DateUtil.now(), MediaType.APPLICATION_JSON);
-            Thread.sleep(1000);
+            Thread.sleep(500);
         }
+        closeConn(clientId);
     }
 
     @Override

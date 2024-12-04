@@ -1,7 +1,6 @@
 package com.diaoyn.provider.multiple.impl;
 
 import com.diaoyn.provider.multiple.DemoManyService;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Service;
  * @Date 2024/9/25 17:21
  */
 @Service
-@ConditionalOnProperty(value = "multiple.type", havingValue = "11")
+//@ConditionalOnProperty(value = "multiple.type", havingValue = "11")
 public class Demo2ServiceImpl implements DemoManyService {
     @Override
     public String test() {

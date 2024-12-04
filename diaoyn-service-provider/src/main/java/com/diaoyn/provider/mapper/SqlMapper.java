@@ -16,7 +16,7 @@ import java.util.Map;
  * 执行原生sql语句mapper
  */
 @Mapper
-public interface SqlMapper extends BaseMapper<Void> {
+public interface SqlMapper extends BaseMapper<String> {
 
     @Select("SELECT TABLE_NAME, TABLE_COMMENT\n" +
             "FROM information_schema.tables\n" +
