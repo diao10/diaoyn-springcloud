@@ -3,7 +3,7 @@ package com.diaoyn.provider.service;
 import com.diaoyn.common.vo.DemoRepVO;
 import com.diaoyn.common.vo.DemoVO;
 import com.diaoyn.common.vo.ResponseVO;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import javax.validation.constraints.NotBlank;
 
@@ -21,7 +21,7 @@ public interface DemoService {
      */
     ResponseVO<DemoRepVO> demo(DemoVO vo);
 
-    SseEmitter getConn(@NotBlank String clientId);
+    ResponseBodyEmitter getConn(@NotBlank String clientId);
 
     void send(@NotBlank String clientId);
 

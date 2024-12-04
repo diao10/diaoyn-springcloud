@@ -1,5 +1,6 @@
 package com.diaoyn.provider.controller;
 
+import cn.hutool.core.date.DateUtil;
 import com.diaoyn.common.handler.ApiModelPropertyPropertyBuilderJson;
 import com.diaoyn.common.vo.DemoRepVO;
 import com.diaoyn.common.vo.DemoVO;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
@@ -50,11 +52,27 @@ public class DemoController {
 
     @ApiOperation("连续获取服务器时间")
     @GetMapping("/getTime")
-    public SseEmitter getTime(String clientId) {
-        SseEmitter emitter = demoService.getConn(clientId);
+    public ResponseBodyEmitter getTime(String clientId) {
+        ResponseBodyEmitter emitter = demoService.getConn(clientId);
         CompletableFuture.runAsync(() -> {
             try {
                 demoService.send(clientId);
+            } catch (Exception e) {
+                emitter.completeWithError(e);
+                throw new RuntimeException("推送数据异常");
+            }
+        });
+        emitter.complete();
+        return emitter;
+    }
+
+    @ApiOperation("适合服务推送")
+    @GetMapping("/sendTime")
+    public SseEmitter sendTime() {
+        SseEmitter emitter = new SseEmitter();
+        CompletableFuture.runAsync(() -> {
+            try {
+                emitter.send(DateUtil.now());
             } catch (Exception e) {
                 emitter.completeWithError(e);
                 throw new RuntimeException("推送数据异常");

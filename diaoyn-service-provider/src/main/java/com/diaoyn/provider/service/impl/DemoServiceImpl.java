@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
@@ -27,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class DemoServiceImpl implements DemoService {
 
-    private static final Map<String, SseEmitter> SSE_CACHE = new ConcurrentHashMap<>();
+    private static final Map<String, ResponseBodyEmitter> SSE_CACHE = new ConcurrentHashMap<>();
     @Resource
     private IMyUserService myUserService;
 
@@ -47,8 +48,8 @@ public class DemoServiceImpl implements DemoService {
     }
 
     @Override
-    public SseEmitter getConn(String clientId) {
-        SseEmitter sseEmitter = SSE_CACHE.get(clientId);
+    public ResponseBodyEmitter getConn(String clientId) {
+        ResponseBodyEmitter sseEmitter = SSE_CACHE.get(clientId);
 
         if (sseEmitter != null) {
             return sseEmitter;
@@ -81,7 +82,7 @@ public class DemoServiceImpl implements DemoService {
     @Override
     @SneakyThrows
     public void send(String clientId) {
-        SseEmitter emitter = SSE_CACHE.get(clientId);
+        ResponseBodyEmitter emitter = SSE_CACHE.get(clientId);
         for (int i = 0; i < 20; i++) {
             emitter.send(DateUtil.now(), MediaType.APPLICATION_JSON);
             Thread.sleep(1000);
@@ -90,7 +91,7 @@ public class DemoServiceImpl implements DemoService {
 
     @Override
     public void closeConn(String clientId) {
-        SseEmitter sseEmitter = SSE_CACHE.get(clientId);
+        ResponseBodyEmitter sseEmitter = SSE_CACHE.get(clientId);
         if (sseEmitter != null) {
             sseEmitter.complete();
         }
