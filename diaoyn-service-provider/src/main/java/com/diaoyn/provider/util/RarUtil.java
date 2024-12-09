@@ -33,11 +33,13 @@ public class RarUtil {
         try {
             // 第一个参数是需要解压的压缩包路径，第二个参数参考JdkAPI文档的RandomAccessFile
             randomAccessFile = new RandomAccessFile(rarDir, "r");
+            RandomAccessFileInStream stream = new RandomAccessFileInStream(randomAccessFile);
             if (StringUtils.isNotBlank(passWord)) {
-                inArchive = SevenZip.openInArchive(null, new RandomAccessFileInStream(randomAccessFile), passWord);
+                inArchive = SevenZip.openInArchive(null, stream, passWord);
             } else {
-                inArchive = SevenZip.openInArchive(null, new RandomAccessFileInStream(randomAccessFile));
+                inArchive = SevenZip.openInArchive(null, stream);
             }
+
             ISimpleInArchive simpleInArchive = inArchive.getSimpleInterface();
             for (final ISimpleInArchiveItem item : simpleInArchive.getArchiveItems()) {
                 //PDF是否
@@ -51,7 +53,9 @@ public class RarUtil {
                     if (StringUtils.isNotBlank(passWord)) {
                         result = item.extractSlow(data -> {
                             try {
-                                IOUtils.write(data, new FileOutputStream(outFile, true));
+                                FileOutputStream outputStream = new FileOutputStream(outFile, true);
+                                IOUtils.write(data, outputStream);
+                                outputStream.close();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -60,7 +64,9 @@ public class RarUtil {
                     } else {
                         result = item.extractSlow(data -> {
                             try {
-                                IOUtils.write(data, new FileOutputStream(outFile, true));
+                                FileOutputStream outputStream = new FileOutputStream(outFile, true);
+                                IOUtils.write(data, outputStream);
+                                outputStream.close();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -73,7 +79,8 @@ public class RarUtil {
                     }
                 }
             }
-
+            stream.close();
+            simpleInArchive.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -174,10 +181,5 @@ public class RarUtil {
                 }
             }
         }
-    }
-
-
-    public static void main(String[] args) {
-        RarUtil.unRar("C:\\Users\\EDY\\Desktop\\测试04.rar");
     }
 }
