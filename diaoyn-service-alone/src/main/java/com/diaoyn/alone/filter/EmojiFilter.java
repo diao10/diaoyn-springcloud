@@ -1,5 +1,6 @@
 package com.diaoyn.alone.filter;
 
+import cn.hutool.core.io.IoUtil;
 import com.diaoyn.alone.vo.ResponseVO;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,7 +36,7 @@ public class EmojiFilter implements Filter {
     private static final String PUT = "PUT";
 
     @Override
-    public void init(FilterConfig filterConfig) {
+    public void init(FilterConfig filterConfig) throws ServletException {
     }
 
     @Override
@@ -50,7 +51,6 @@ public class EmojiFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-
         //post和put请求只能读一次stream 需要封装
         CustomHttpServletRequestWrapper emojiWrapper = new CustomHttpServletRequestWrapper(req);
         res.setCharacterEncoding("utf-8");
@@ -73,12 +73,8 @@ public class EmojiFilter implements Filter {
         }
         if (POST.equals(method) || PUT.equals(method)) {
             try {
-                br = emojiWrapper.getReader();
-                StringBuffer string = new StringBuffer();
-                String line;
-                while ((line = br.readLine()) != null) {
-                    string.append(line);
-                }
+                String string = IoUtil.read(emojiWrapper.getReader());
+                System.out.println("string = " + string);
                 if (pattern.matcher(string).find()) {
                     tag = true;
                 }

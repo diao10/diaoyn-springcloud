@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author diaoyn
@@ -18,20 +19,17 @@ import java.io.InputStreamReader;
  */
 
 public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
-    private byte[] requestBody = null;
 
     public CustomHttpServletRequestWrapper(HttpServletRequest request) {
         super(request);
-        try {
-            requestBody = StreamUtils.copyToByteArray(request.getInputStream());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     @Override
-    public ServletInputStream getInputStream() {
-        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(requestBody);
+    public ServletInputStream getInputStream() throws IOException {
+        ServletInputStream inputStream = super.getInputStream();
+        String requestBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+        final ByteArrayInputStream byteArrayInputStream =
+                new ByteArrayInputStream(requestBody.getBytes(StandardCharsets.UTF_8));
         return new ServletInputStream() {
 
             @Override
@@ -58,7 +56,7 @@ public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     @Override//对外提供读取流的方法
     public BufferedReader getReader() throws IOException {
-        return new BufferedReader(new InputStreamReader(getInputStream()));
+        return new BufferedReader(new InputStreamReader(getInputStream(), StandardCharsets.UTF_8));
     }
 
 
