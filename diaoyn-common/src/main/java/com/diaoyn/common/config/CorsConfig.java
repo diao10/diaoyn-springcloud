@@ -18,8 +18,8 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 对所有路径应用跨域配置
                 .allowedOrigins("*") // 允许任何域进行跨域访问
-                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE") // 允许的请求方法
+                .allowedMethods("*") // 允许的请求方法
+                .maxAge(3600) // 预检请求的缓存时间
                 .allowedHeaders("*"); // 允许的请求头
     }
 }

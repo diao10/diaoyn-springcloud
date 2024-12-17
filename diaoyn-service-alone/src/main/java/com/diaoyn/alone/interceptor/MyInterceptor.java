@@ -18,6 +18,9 @@ public class MyInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, @Nullable HttpServletResponse response,
                              @Nullable Object handler) throws Exception {
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true;
+        }
         String token = request.getHeader("token");
         if (StrUtil.isEmpty(token)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "请重新登录");
