@@ -2,6 +2,7 @@ package com.diaoyn.provider.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.diaoyn.provider.handler.BatchSqlInjector;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,6 +21,11 @@ public class MybatisPlusConfig {
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor()); //分页插件
 //        interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor()); //乐观锁插件
         return interceptor;
+    }
+
+    @Bean
+    public BatchSqlInjector sqlInjector() {
+        return new BatchSqlInjector();
     }
 
 }

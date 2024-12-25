@@ -11,6 +11,7 @@ import com.diaoyn.provider.vo.rep.CommonRepVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
@@ -50,19 +51,29 @@ public class DemoController {
         return demoService.demo(vo);
     }
 
+    @ApiOperation("创建Emitter")
+    @GetMapping("/getConn/{clientId}")
+    public ResponseVO<Void> getConn(@PathVariable String clientId) {
+        demoService.getConn(clientId);
+        return ResponseVO.success();
+    }
+
     @ApiOperation("连续获取服务器时间")
     @GetMapping("/getTime/{clientId}")
     public ResponseBodyEmitter getTime(@PathVariable String clientId) {
         ResponseBodyEmitter emitter = demoService.getConn(clientId);
         CompletableFuture.runAsync(() -> {
             try {
-                demoService.send(clientId);
+                for (int i = 0; i < 20; i++) {
+                    emitter.send(DateUtil.now(), MediaType.APPLICATION_JSON);
+                    Thread.sleep(500);
+                }
             } catch (Exception e) {
                 emitter.completeWithError(e);
                 throw new RuntimeException("推送数据异常");
             }
         });
-         return emitter;
+        return emitter;
     }
 
     @ApiOperation("适合服务推送")
