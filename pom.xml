@@ -15,7 +15,7 @@
     </parent>
     <modules>
         <module>diaoyn-common</module>
-        <module>diaoyn-common-generator</module>
+        <module>diaoyn-generator</module>
         <module>diaoyn-gateway</module>
         <module>diaoyn-service-provider</module>
         <module>diaoyn-service-consumer</module>
