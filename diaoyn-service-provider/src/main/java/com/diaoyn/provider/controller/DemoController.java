@@ -1,6 +1,9 @@
 package com.diaoyn.provider.controller;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.URLUtil;
 import com.diaoyn.common.handler.ApiModelPropertyPropertyBuilderJson;
 import com.diaoyn.common.vo.DemoRepVO;
 import com.diaoyn.common.vo.DemoVO;
@@ -11,6 +14,8 @@ import com.diaoyn.provider.vo.rep.CommonRepVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +23,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -27,6 +35,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @RequestMapping
 @Api(tags = "demo服务端接口")
+@Slf4j
 public class DemoController {
 
     @Resource
@@ -102,4 +111,44 @@ public class DemoController {
         return null;
     }
 
+
+    @GetMapping("/export")
+    @ApiOperation("导出文件")
+    @SneakyThrows
+    public void export(HttpServletResponse response) throws IOException {
+        File file = FileUtil.file("C:\\Users\\EDY\\Desktop\\voice\\ordSpeechSounds\\开启自动落锁1720927751603.wav");
+        download(file, response);
+    }
+
+
+    /**
+     * 下载文件
+     *
+     * @param file     要下载的文件
+     * @param response 响应
+     * @author xuyuxiang
+     * @date 2020/8/5 21:46
+     */
+    public static void download(File file, HttpServletResponse response) {
+        download(file.getName(), FileUtil.readBytes(file), response);
+    }
+
+    /**
+     * 下载文件
+     *
+     * @author xuyuxiang
+     * @date 2022/7/31 10:57
+     */
+    public static void download(String fileName, byte[] fileBytes, HttpServletResponse response) {
+        try {
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLUtil.encode(fileName));
+            response.addHeader("Content-Length", "" + fileBytes.length);
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+            response.setContentType("application/octet-stream;charset=UTF-8");
+            IoUtil.write(response.getOutputStream(), true, fileBytes);
+        } catch (IOException e) {
+            log.error(">>> 文件下载异常：", e);
+        }
+    }
 }
