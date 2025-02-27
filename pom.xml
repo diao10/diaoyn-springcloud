@@ -20,6 +20,9 @@
         <module>diaoyn-service-provider</module>
         <module>diaoyn-service-consumer</module>
         <module>diaoyn-service-plugin</module>
+        <module>diaoyn-service-ai</module>
+        <module>diaoyn-service-ai-api</module>
+
     </modules>
     <properties>
         <java.version>1.8</java.version>
@@ -72,6 +75,18 @@
             <dependency>
                 <groupId>com.diaoyn</groupId>
                 <artifactId>diaoyn-service-plugin</artifactId>
+                <version>${diaoyn.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.diaoyn</groupId>
+                <artifactId>diaoyn-service-ai-api</artifactId>
+                <version>${diaoyn.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.diaoyn</groupId>
+                <artifactId>diaoyn-service-ai</artifactId>
                 <version>${diaoyn.version}</version>
             </dependency>
 

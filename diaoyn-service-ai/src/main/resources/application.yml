@@ -1,0 +1,10 @@
+anythingllm:
+  url: http://192.168.0.235:3001/api
+  token: HB2AY7K-E55M2HC-PPB6KYF-YDF90KR
+  slug: ai
+
+gradio:
+  url: http://192.168.0.235:7890/gradio_api
+
+ollama:
+  url: http://192.168.0.235:11434

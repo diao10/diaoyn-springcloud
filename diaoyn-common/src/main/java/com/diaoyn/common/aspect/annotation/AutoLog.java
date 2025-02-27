@@ -1,4 +1,4 @@
-package com.diaoyn.provider.aspect.annotation;
+package com.diaoyn.common.aspect.annotation;
 
 import java.lang.annotation.*;
 

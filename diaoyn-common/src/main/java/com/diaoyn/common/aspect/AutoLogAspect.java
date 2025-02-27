@@ -1,8 +1,8 @@
-package com.diaoyn.provider.aspect;
+package com.diaoyn.common.aspect;
 
 import cn.hutool.core.date.StopWatch;
 import cn.hutool.core.util.ObjectUtil;
-import com.diaoyn.provider.aspect.annotation.AutoLog;
+import com.diaoyn.common.aspect.annotation.AutoLog;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 @Slf4j
 public class AutoLogAspect {
 
-    @Pointcut("@annotation(com.diaoyn.provider.aspect.annotation.AutoLog)")
+    @Pointcut("@annotation(com.diaoyn.common.aspect.annotation.AutoLog)")
     public void logPointCut() {
 
     }

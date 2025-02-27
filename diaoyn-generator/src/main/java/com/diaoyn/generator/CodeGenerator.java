@@ -492,7 +492,7 @@ public class CodeGenerator {
                 .execute(
                         "diaoyn-common-generator",
                         "com.diaoyn.example",
-                        "cs_dbc"
+                        "cs_voice_corpus"
                 );
     }
 }
