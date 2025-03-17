@@ -1,5 +1,4 @@
 #!/bin/bash
-#天阳客户关系管理系统通用部署配置
 #应用服务路径
 #. ~/.bash_profile
 BAS_PATH=/home/bhb
