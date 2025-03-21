@@ -16,4 +16,12 @@ public class GradioConfig {
 
      private String url;
 
+//     private final GradioConfig gradioConfig;
+//
+//     @Autowired
+//     public GradioServiceImpl(@Lazy GradioConfig gradioConfig) {
+//          this.gradioConfig = gradioConfig;
+//          HttpGlobalConfig.setTimeout(5 * 60 * 1000);
+//     }
+
 }
