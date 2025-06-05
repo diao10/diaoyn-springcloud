@@ -1,0 +1,23 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: diaoyn-spring-ai-chat
+#  ai:
+#    dashscope:
+#      api-key: sk-f72d6b0279f44f6db391096659fa2f5e
+#      base-url: "https://api.deepseek.com"
+#      chat:
+#        options:
+#          model: deepseek-chat
+  ai:
+    dashscope:
+      api-key: sk-335ea69062454057bbceba15bffda694
+      chat:
+        options:
+          model: qwq-plus
+knife4j:
+  enable: true
+  setting:
+    enable-version: true
