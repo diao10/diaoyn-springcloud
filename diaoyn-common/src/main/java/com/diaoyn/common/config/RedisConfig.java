@@ -1,9 +1,13 @@
 package com.diaoyn.common.config;
 
+import com.diaoyn.common.listener.ExpiryListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -13,6 +17,12 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  */
 @Configuration
 public class RedisConfig<K, V> {
+    /**
+     * RedisTemplate配置
+     *
+     * @param redisConnectionFactory redis连接工厂对象
+     * @return RedisTemplate
+     */
     @Bean
     public RedisTemplate<K, V> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 
@@ -27,5 +37,32 @@ public class RedisConfig<K, V> {
         return redisTemplate;
     }
 
+
+    /**
+     * 监听redis的过期事件
+     *
+     * @param connectionFactory redis连接工厂对象
+     * @param listenerAdapter   监听适配器对象
+     * @return RedisMessageListenerContainer
+     */
+    @Bean
+    RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
+                                            MessageListenerAdapter listenerAdapter) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(listenerAdapter, new PatternTopic("__keyevent@0__:expired"));
+        return container;
+    }
+
+    /**
+     * 监听适配器
+     *
+     * @param listener 监听器对象
+     * @return MessageListenerAdapter
+     */
+    @Bean
+    MessageListenerAdapter listenerAdapter(ExpiryListener listener) {
+        return new MessageListenerAdapter(listener, "handleMessage");
+    }
 
 }
