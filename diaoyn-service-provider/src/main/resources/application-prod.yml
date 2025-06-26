@@ -23,3 +23,8 @@ springfox:
 
 multiple:
   type: 11
+
+rocketmq:
+  name-server: localhost:9876
+  producer:
+    group: order_order

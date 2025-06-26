@@ -44,6 +44,8 @@
         <sevenzipjbinding.version>16.02-2.01</sevenzipjbinding.version>
         <fastjson.version>2.0.52</fastjson.version>
         <oshi.version>6.6.5</oshi.version>
+        <rocketmq.version>2.3.3</rocketmq.version>
+
     </properties>
 
     <dependencyManagement>
@@ -185,6 +187,11 @@
                 <groupId>com.github.oshi</groupId>
                 <artifactId>oshi-core</artifactId>
                 <version>${oshi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
