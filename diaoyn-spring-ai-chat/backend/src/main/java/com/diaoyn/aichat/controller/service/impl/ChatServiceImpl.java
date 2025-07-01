@@ -2,15 +2,12 @@ package com.diaoyn.aichat.controller.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.diaoyn.aichat.controller.service.ChatService;
-import jakarta.annotation.Resource;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
-import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -30,15 +27,11 @@ public class ChatServiceImpl implements ChatService {
             "并且所有的回答都必须用中文回答。";
 
 
-    @Resource
-    ChatModel chatModel;
-
-    @Resource
     ChatClient chatClient;
 
-    InMemoryChatMemoryRepository inMemoryChatMemoryRepository;
+//    InMemoryChatMemoryRepository inMemoryChatMemoryRepository;
 
-    public ChatServiceImpl() {
+    public ChatServiceImpl(ChatModel chatModel) {
         chatClient = ChatClient.builder(chatModel)
                 .defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
                 .build();
@@ -47,12 +40,12 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public String chat(String message) {
-        if (StrUtil.isEmpty(message)) {
-            message = DEFAULT_PROMPT;
-        }
-        ChatResponse response = chatModel.call(new Prompt(message));
-        return response.getResult().getOutput().getText();
-
+//        if (StrUtil.isEmpty(message)) {
+//            message = DEFAULT_PROMPT;
+//        }
+//        ChatResponse response = chatModel.call(new Prompt(message));
+//        return response.getResult().getOutput().getText();
+return  null;
 
     }
 
