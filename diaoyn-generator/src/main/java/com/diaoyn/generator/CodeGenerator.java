@@ -24,7 +24,7 @@ import java.util.*;
 
 /**
  * @author diaoyn
- * @ClassName Codeeg
+ * @ClassName CodeGenerator
  * @Date 2024/9/4 13:31
  */
 public class CodeGenerator {
@@ -65,8 +65,8 @@ public class CodeGenerator {
 
     private static final List<JSONObject> GEN_FRONT_FILE_LIST = CollectionUtil.newArrayList(
             JSONUtil.createObj().set("name", "Api.ts.btl").set("path", "api"),
-//            JSONUtil.createObj().set("name", "Api.js.btl").set("path", "api"),
-//            JSONUtil.createObj().set("name", "form.vue.btl").set("path", "views"),
+            JSONUtil.createObj().set("name", "Api.js.btl").set("path", "api"),
+            JSONUtil.createObj().set("name", "form.vue.btl").set("path", "views"),
             JSONUtil.createObj().set("name", "index.vue.btl").set("path", "views")
     );
 
@@ -82,13 +82,15 @@ public class CodeGenerator {
     private static final List<JSONObject> GEN_BACKEND_FILE_LIST = CollectionUtil.newArrayList(
             JSONUtil.createObj().set("name", "Controller.java.btl").set("path", "controller"),
             JSONUtil.createObj().set("name", "Entity.java.btl").set("path", "entity"),
-//            JSONUtil.createObj().set("name", "Enum.java.btl").set("path", "enums"),
+            JSONUtil.createObj().set("name", "Enum.java.btl").set("path", "enums"),
             JSONUtil.createObj().set("name", "Mapper.java.btl").set("path", "mapper"),
             JSONUtil.createObj().set("name", "Mapper.xml.btl").set("path", "mapper" + File.separator + "xml"),
             JSONUtil.createObj().set("name", "Vo.java.btl").set("path", "vo"),
-//            JSONUtil.createObj().set("name", "EditParam.java.btl").set("path", "param"),
-//            JSONUtil.createObj().set("name", "IdParam.java.btl").set("path", "param"),
-//            JSONUtil.createObj().set("name", "PageParam.java.btl").set("path", "param"),
+            JSONUtil.createObj().set("name", "ReqDTO.java.btl").set("path", "req"),
+            JSONUtil.createObj().set("name", "QueryReqDTO.java.btl").set("path", "req"),
+            JSONUtil.createObj().set("name", "EditParam.java.btl").set("path", "param"),
+            JSONUtil.createObj().set("name", "IdParam.java.btl").set("path", "param"),
+            JSONUtil.createObj().set("name", "PageParam.java.btl").set("path", "param"),
             JSONUtil.createObj().set("name", "Service.java.btl").set("path", "service"),
             JSONUtil.createObj().set("name", "ServiceImpl.java.btl").set("path", "service" + File.separator + "impl")
     );
@@ -169,7 +171,6 @@ public class CodeGenerator {
 
     /**
      * 执行生成文件
-     *
      * @param moduleName  模块名称
      * @param packageName 包名称
      * @param tableNames  表名称集合
@@ -199,7 +200,6 @@ public class CodeGenerator {
 
     /**
      * 生成后端代码
-     *
      * @param moduleName  模块名称
      * @param packageName 包名称
      * @param tableDto    表名称
@@ -211,8 +211,8 @@ public class CodeGenerator {
             GroupTemplate groupTemplate = new GroupTemplate(new ClasspathResourceLoader("backend"),
                     Configuration.defaultConfiguration());
             GEN_BACKEND_FILE_LIST.forEach(t -> {
-                Template templateBackend = groupTemplate.getTemplate(t.getStr("name"));
-                templateBackend.binding(bindMap);
+                Template template = groupTemplate.getTemplate(t.getStr("name"));
+                template.binding(bindMap);
                 String userDir = SystemUtil.getUserInfo().getCurrentDir();
                 String className = StrUtil.removeSuffix(t.getStr("name"), ".btl");
                 if ("Entity.java.btl".equalsIgnoreCase(t.getStr("name"))) {
@@ -232,7 +232,10 @@ public class CodeGenerator {
                         + File.separator + t.getStr("path")
                         + File.separator + tableDto.getTableNameCamelCaseFirstUpper()
                         + className;
-                FileUtil.writeUtf8String(templateBackend.render(), outDir);
+                String render = template.render();
+                if (StrUtil.isNotBlank(render)) {
+                    FileUtil.writeUtf8String(render, outDir);
+                }
             });
 
         } catch (IOException e) {
@@ -242,7 +245,6 @@ public class CodeGenerator {
 
     /**
      * 生成前端代码
-     *
      * @param moduleName 模块名称
      * @param tableDto   表名称
      * @param bindMap    btl里的参数映射
@@ -253,8 +255,8 @@ public class CodeGenerator {
             GroupTemplate groupTemplate = new GroupTemplate(new ClasspathResourceLoader("frontend"),
                     Configuration.defaultConfiguration());
             GEN_FRONT_FILE_LIST.forEach(t -> {
-                Template templateBackend = groupTemplate.getTemplate(t.getStr("name"));
-                templateBackend.binding(bindMap);
+                Template template = groupTemplate.getTemplate(t.getStr("name"));
+                template.binding(bindMap);
                 String userDir = SystemUtil.getUserInfo().getCurrentDir();
                 String className = StrUtil.removeSuffix(t.getStr("name"), ".btl");
                 String outDir =
@@ -263,7 +265,10 @@ public class CodeGenerator {
                                 + File.separator + t.getStr("path")
                                 + File.separator + tableDto.getBizName()
                                 + className;
-                FileUtil.writeUtf8String(templateBackend.render(), outDir);
+                String render = template.render();
+                if (StrUtil.isNotBlank(render)) {
+                    FileUtil.writeUtf8String(render, outDir);
+                }
             });
 
 
@@ -276,7 +281,6 @@ public class CodeGenerator {
 
     /**
      * btl里的参数映射
-     *
      * @param packageName  包名称
      * @param tableDto     表名称
      * @param fieldDtoList 字段列表
@@ -364,7 +368,7 @@ public class CodeGenerator {
             configItem.set("isKeyId", false);
             if (StrUtil.isNotBlank(fieldDto.getFieldKey())) {
                 configItem.set("isKeyId", true);
-                importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
+//                importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
             }
             // 实体类型
             configItem.set("fieldJavaType", fieldDto.getDbColumnType().getType());
@@ -482,17 +486,26 @@ public class CodeGenerator {
         //开启swagger2
         new CodeGenerator()
                 .enableSwagger()
-                .backendFlag(false)
+                .frontendFlag(false)
                 .setCreateUserKey("createBy")
-                .setDb("jdbc:mysql://192.168.0.200:3306/test-system?characterEncoding=UTF-8&useUnicode=true" +
+                .setDb("jdbc:mysql://10.1.40.9:3306/ncme_new_uat?characterEncoding=UTF-8&useUnicode=true" +
                                 "&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia" +
                                 "/Shanghai",
-                        "root",
-                        "root")
+                        "ncme_new_uat",
+                        "JK3s6&wm0ZX1Te)}")
                 .execute(
-                        "diaoyn-common-generator",
+                        "diaoyn-generator",
                         "com.diaoyn.example",
-                        "cs_voice_corpus"
+                        "tb_collect_audit",
+                        "tb_collect_cc_log",
+                        "tb_collect_course",
+                        "tb_collect_course_job",
+                        "tb_collect_course_video",
+                        "tb_collect_lecturer",
+                        "tb_collect_org",
+                        "tb_collect_relation",
+                        "tb_collect_subject_rel"
                 );
     }
 }
+

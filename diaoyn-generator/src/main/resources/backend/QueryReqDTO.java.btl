@@ -1,0 +1,48 @@
+package ${packageName}.req;
+
+import com.diaoyn.ValidGroup;
+<% if(swagger) { %>
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+<% } else if(springdoc) { %>
+import io.swagger.v3.oas.annotations.media.Schema;
+<% } %>
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * ${tableComment}(${className})ReqDTO请求ReqDTO
+ *
+ * @author ${authorName}
+ * @Date ${createTime}
+ **/
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+<% if(swagger) { %>
+@ApiModel(value = "${className}QueryReqDTO", description = "${tableComment}请求QueryReqDTO")
+<% } else if(springdoc) { %>
+@Schema(name = "${className}QueryReqDTO", description = "${tableComment}请求QueryReqDTO")
+<% } %>
+public class ${className}QueryReqDTO extends PageRequest implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    <% for(var i = 0; i < configList.~size; i++) { %>
+    <% if(swagger) { %>
+    @ApiModelProperty(value = "${configList[i].fieldComment}", example = "${configList[i].fieldComment}")
+    <% } else if(springdoc) { %>
+    @Schema(title = "${configList[i].fieldComment}", example = "${configList[i].fieldComment}")
+    <% } %>
+    private ${configList[i].fieldJavaType} ${configList[i].fieldNameCamelCase};
+
+    <% } %>
+}

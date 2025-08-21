@@ -1,7 +1,11 @@
 package ${packageName}.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import ${packageName}.entity.${className};
+import ${packageName}.req.${className}ReqDTO;
+import com.github.pagehelper.PageInfo;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * ${tableComment}(${className})Service接口
@@ -9,6 +13,52 @@ import ${packageName}.entity.${className};
  * @author ${authorName}
  * @Date ${createTime}
  **/
-public interface ${className}Service extends IService<${className}> {
+public interface ${className}Service {
 
+    /**
+     * 分页查询所有${tableComment}
+     *
+     * @param req   请求参数
+     * @return 所有${tableComment}
+     */
+    PageInfo<${className}> page(${className}QueryReqDTO req);
+
+    /**
+     * 查询所有${tableComment}
+     *
+     * @return 所有${tableComment}
+     */
+    List<${className}> list();
+
+    /**
+     * 通过${tableComment}主键查询单条数据
+     *
+     * @param id ${tableComment}主键
+     * @return 单条数据
+     */
+    ${className} getById(Serializable id);
+
+    /**
+     * 添加${tableComment}
+     *
+     * @param req 请求对象
+     * @return 添加结果
+     */
+    void add(${className}ReqDTO req);
+
+    /**
+      * 修改${tableComment}
+      *
+      * @param req 请求对象
+      * @return 修改结果
+      */
+    void updateById(${className}ReqDTO req);
+
+    /**
+     * 删除${tableComment}
+     *
+     * @param req 请求对象
+     * @return 删除结果
+     */
+    void delete(IdsReqDTO req);
 }

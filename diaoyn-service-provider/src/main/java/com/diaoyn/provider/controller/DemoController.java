@@ -3,12 +3,13 @@ package com.diaoyn.provider.controller;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
+import com.diaoyn.common.aspect.annotation.AutoLog;
 import com.diaoyn.common.handler.ApiModelPropertyPropertyBuilderJson;
 import com.diaoyn.common.vo.DemoRepVO;
 import com.diaoyn.common.vo.DemoVO;
 import com.diaoyn.common.vo.ResponseVO;
-import com.diaoyn.common.aspect.annotation.AutoLog;
 import com.diaoyn.provider.service.DemoService;
 import com.diaoyn.provider.vo.rep.CommonRepVo;
 import io.swagger.annotations.Api;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -112,6 +114,21 @@ public class DemoController {
     }
 
 
+    @PostMapping("/upload")
+    @ApiOperation("上传文件")
+    public ResponseVO<?> documentUpload(@RequestBody MultipartFile file) {
+        String tmpFilePath = FileUtil.normalize(FileUtil.getTmpDirPath() + StrUtil.SLASH + file.getOriginalFilename());
+        File tmpFile = FileUtil.file(tmpFilePath);
+        try {
+            file.transferTo(tmpFile);
+            log.info("上传文件成功，文件路径：{}", tmpFilePath);
+            return ResponseVO.success();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     @GetMapping("/export")
     @ApiOperation("导出文件")
     @SneakyThrows
@@ -123,7 +140,6 @@ public class DemoController {
 
     /**
      * 下载文件
-     *
      * @param file     要下载的文件
      * @param response 响应
      * @author xuyuxiang
@@ -135,7 +151,6 @@ public class DemoController {
 
     /**
      * 下载文件
-     *
      * @author xuyuxiang
      * @date 2022/7/31 10:57
      */

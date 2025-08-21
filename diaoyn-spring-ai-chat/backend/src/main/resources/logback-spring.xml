@@ -48,11 +48,6 @@
         </filter>-->
     </appender>
 
-    <!--    <logger name="com.cbhb" level="${log.level}" additivity="true">-->
-    <!--        <appender-ref ref="rollingAppender"/>-->
-    <!--        <appender-ref ref="console"/>-->
-    <!--    </logger>-->
-
     <root level="${log.level}">
         <appender-ref ref="console"/>
         <appender-ref ref="rollingAppender"/>

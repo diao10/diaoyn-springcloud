@@ -9,9 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 <% } else if(springdoc) { %>
 import io.swagger.v3.oas.annotations.media.Schema;
 <% } %>
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * ${tableComment}(${className})实体
@@ -20,8 +18,6 @@ import lombok.NoArgsConstructor;
  * @Date ${createTime}
  **/
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 <% if(swagger) { %>
 @ApiModel(value = "${className}对象", description = "${tableComment}")
 <% } else if(springdoc) { %>
@@ -30,9 +26,10 @@ import lombok.NoArgsConstructor;
 public class ${className} {
 
     <% for(var i = 0; i < configList.~size; i++) { %>
-    /**
-     * ${configList[i].fieldComment}
-     */
+    // ${configList[i].fieldComment}
+    <% if(configList[i].isKeyId) { %>
+    @TableId
+    <% } %>
     <% if(configList[i].isLogicDelete) { %>
     @TableLogic
     @JsonIgnore
