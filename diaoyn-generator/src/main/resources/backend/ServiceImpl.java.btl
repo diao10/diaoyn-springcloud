@@ -24,38 +24,39 @@ public class ${className}ServiceImpl implements ${className}Service {
     private ${className}Mapper ${classNameCamelCase}Mapper;
 
     @Override
-    public PageInfo<${className}> page(${className}QueryReqDTO req) {
+    public PageInfo<${className}> page(${className}QueryReq req) {
         PageHelper.startPage(req.getPageNo(), req.getPageSize());
-        ${className}Example example = new ${className}Example();
-        List<${className}> list = ${classNameCamelCase}Mapper.selectByExample(example);
+        ${className} ${classNameCamelCase} = new ${className}();
+        BeanUtil.copyProperties(req, ${classNameCamelCase});
+        List<${className}> list = ${classNameCamelCase}Mapper.queryList(${classNameCamelCase});
         return new PageInfo<>(list);
     }
 
     @Override
     public List<${className}> list() {
-        return ${classNameCamelCase}Mapper.selectByExample(null);
+        return ${classNameCamelCase}Mapper.queryList(null);
     }
 
     @Override
-    public ${className} getById(Serializable id) {
+    public ${className} getById(Integer id) {
         return ${classNameCamelCase}Mapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public void add(${className}ReqDTO req) {
+    public void add(${className}Req req) {
         ${className} ${classNameCamelCase} = BeanUtil.copyProperties(req, ${className}.class);
         ${classNameCamelCase}.setId(null);
         ${className}Mapper.insert(${classNameCamelCase});
     }
 
     @Override
-    public void updateById(${className}ReqDTO req) {
+    public void updateById(${className}Req req) {
         ${className} ${classNameCamelCase} = BeanUtil.copyProperties(req, ${className}.class);
         ${className}Mapper.updateByPrimaryKeySelective(${classNameCamelCase});
     }
 
     @Override
-    public void delete(IdsReqDTO req) {
+    public void delete(IdsReq req) {
         ${className}Mapper.deleteByIds(req.getIds());
     }
 }

@@ -55,7 +55,7 @@ public class ${className}Controller {
     @Operation(summary = "分页查询所有${tableComment}")
     <% } %>
     @GetMapping("/page")
-    public RespResult<PageInfo<${className}>> page(${className}QueryReqDTO req) {
+    public RespResult<PageInfo<${className}>> page(${className}QueryReq req) {
         return RespResult.success(${classNameCamelCase}Service.page(req));
     }
 
@@ -87,7 +87,7 @@ public class ${className}Controller {
     <% } %>
     @GetMapping("/{id}")
     @ApiImplicitParam(name = "id", value = "主键id", example = "1", dataType = "string", required = true)
-    public RespResult<${className}> getById(@PathVariable Serializable id) {
+    public RespResult<${className}> getById(@PathVariable Integer id) {
         return RespResult.success(${classNameCamelCase}Service.getById(id));
     }
 
@@ -103,7 +103,7 @@ public class ${className}Controller {
     @Operation(summary = "新增${tableComment}")
     <% } %>
     @PostMapping("/add")
-    public RespResult<Void> add(@RequestBody ${className}ReqDTO req) {
+    public RespResult<Void> add(@RequestBody ${className}Req req) {
         ${classNameCamelCase}Service.add(req);
         return RespResult.success();
     }
@@ -120,7 +120,7 @@ public class ${className}Controller {
     @Operation(summary = "修改${tableComment}")
     <% } %>
     @PostMapping("/update")
-    public RespResult<Void> updateById(@Validated(value = ValidGroup.Update.class) @RequestBody ${className}ReqDTO req) {
+    public RespResult<Void> updateById(@Validated(value = ValidGroup.Update.class) @RequestBody ${className}Req req) {
         ${classNameCamelCase}Service.updateById(req);
         return RespResult.success();
     }
@@ -137,7 +137,7 @@ public class ${className}Controller {
     @Operation(summary = "删除${tableComment}")
     <% } %>
     @PostMapping("/delete")
-    public RespResult<Void> delete(@RequestBody IdsReqDTO req) {
+    public RespResult<Void> delete(@RequestBody IdsReq req) {
         ${classNameCamelCase}Service.delete(req);
         return RespResult.success();
     }

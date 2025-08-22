@@ -18,7 +18,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * ${tableComment}(${className})ReqDTO请求ReqDTO
+ * ${tableComment}(${className})Req请求Req
  *
  * @author ${authorName}
  * @Date ${createTime}
@@ -28,11 +28,11 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 <% if(swagger) { %>
-@ApiModel(value = "${className}QueryReqDTO", description = "${tableComment}请求QueryReqDTO")
+@ApiModel(value = "${className}QueryReq", description = "${tableComment}请求QueryReq")
 <% } else if(springdoc) { %>
-@Schema(name = "${className}QueryReqDTO", description = "${tableComment}请求QueryReqDTO")
+@Schema(name = "${className}QueryReq", description = "${tableComment}请求QueryReq")
 <% } %>
-public class ${className}QueryReqDTO extends PageRequest implements Serializable {
+public class ${className}QueryReq extends PageRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
