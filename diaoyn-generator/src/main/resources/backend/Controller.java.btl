@@ -86,7 +86,7 @@ public class ${className}Controller {
     @Operation(summary = "通过主键查询单条${tableComment}")
     <% } %>
     @GetMapping("/{id}")
-    @ApiImplicitParam(name = "id", value = "主键id", example = "1", dataType = "string", required = true)
+    @ApiImplicitParam(name = "id", value = "主键id", example = "1", dataType = "int", required = true)
     public RespResult<${className}> getById(@PathVariable Integer id) {
         return RespResult.success(${classNameCamelCase}Service.getById(id));
     }

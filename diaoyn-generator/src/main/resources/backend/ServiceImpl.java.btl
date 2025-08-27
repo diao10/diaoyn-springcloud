@@ -46,17 +46,17 @@ public class ${className}ServiceImpl implements ${className}Service {
     public void add(${className}Req req) {
         ${className} ${classNameCamelCase} = BeanUtil.copyProperties(req, ${className}.class);
         ${classNameCamelCase}.setId(null);
-        ${className}Mapper.insert(${classNameCamelCase});
+        ${classNameCamelCase}Mapper.insert(${classNameCamelCase});
     }
 
     @Override
     public void updateById(${className}Req req) {
         ${className} ${classNameCamelCase} = BeanUtil.copyProperties(req, ${className}.class);
-        ${className}Mapper.updateByPrimaryKeySelective(${classNameCamelCase});
+        ${classNameCamelCase}Mapper.updateByPrimaryKeySelective(${classNameCamelCase});
     }
 
     @Override
     public void delete(IdsReq req) {
-        ${className}Mapper.deleteByIds(req.getIds());
+        ${classNameCamelCase}Mapper.deleteByIds(req.getIds());
     }
 }

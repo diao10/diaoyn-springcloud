@@ -25,9 +25,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 <% if(swagger) { %>
-@ApiModel(value = "${className}对象", description = "${tableComment}")
+@ApiModel(value = "${className}", description = "${tableComment}")
 <% } else if(springdoc) { %>
-@Schema(name = "${className}对象", description = "${tableComment}")
+@Schema(name = "${className}", description = "${tableComment}")
 <% } %>
 public class ${className} {
 
