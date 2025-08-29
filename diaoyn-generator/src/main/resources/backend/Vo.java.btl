@@ -1,16 +1,15 @@
 package ${packageName}.vo;
 
-import com.diaoyn.ValidGroup;
 <% if(swagger) { %>
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 <% } else if(springdoc) { %>
 import io.swagger.v3.oas.annotations.media.Schema;
 <% } %>
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import java.io.Serial;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -21,23 +20,23 @@ import java.util.Date;
  * @Date ${createTime}
  **/
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 <% if(swagger) { %>
-@ApiModel(value = "${className}Vo", description = "${tableComment}请求Vo")
+@ApiModel(value = "${className}Vo", description = "${tableComment}")
 <% } else if(springdoc) { %>
-@Schema(name = "${className}Vo", description = "${tableComment}请求Vo")
+@Schema(name = "${className}Vo", description = "${tableComment}")
 <% } %>
 public class ${className}Vo implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 1L;
 
     <% for(var i = 0; i < configList.~size; i++) { %>
     <% if(swagger) { %>
-    @ApiModelProperty(value = "${configList[i].fieldComment}", example = "${configList[i].fieldComment}", required = true)
+    @ApiModelProperty(value = "${configList[i].fieldComment}")
     <% } else if(springdoc) { %>
-    @Schema(title = "${configList[i].fieldComment}", example = "${configList[i].fieldComment}", required = true)
+    @Schema(title = "${configList[i].fieldComment}")
     <% } %>
-    <% if(configList[i].fieldJavaType == 'String') { %>@NotBlank<% } else { %>@NotNull<% } %>(message = "${configList[i].fieldComment}不能为空"<% if(configList[i].isKeyId) { %>, groups = ValidGroup.Update.class<% } %>)
     private ${configList[i].fieldJavaType} ${configList[i].fieldNameCamelCase};
 
     <% } %>
